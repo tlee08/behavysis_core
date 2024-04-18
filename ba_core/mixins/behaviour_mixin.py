@@ -60,7 +60,7 @@ class BehaviourMixin:
         # For each behaviour
         for behav in frames_df.columns.unique(BEHAV_COLUMN_NAMES[0]):
             # Getting start-stop of each bout
-            start_stop_df = BehaviourMixin.vect_to_bouts(frames_df[(behav, "pred")])
+            start_stop_df = BehaviourMixin.vect_2_bouts(frames_df[(behav, "pred")])
             # For each bout (i.e. start-stop pair)
             for _, row in start_stop_df.iterrows():
                 # Getting only the frames in the current bout

@@ -97,7 +97,7 @@ class DFIOMixin:
 
     @staticmethod
     @write_decorator
-    def write_feather(df: pd.DataFrame, fp: str) -> None:
+    def write_feather(df: Union[pd.Series, pd.DataFrame], fp: str) -> None:
         """
         Writing dataframe feather file.
         """

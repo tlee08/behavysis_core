@@ -1,5 +1,5 @@
-# install: conda env create -f ba_env.yaml
-# update: conda env update -f ba_env.yaml --prune
+# install: conda env create -f conda_env.yaml
+# update: conda env update -f conda_env.yaml --prune
 
 name: ba_core_env
 channels:
@@ -7,24 +7,7 @@ channels:
   - defaults
 dependencies:
   - python
-  - setuptools
   - pip
   - ipykernel
   - nb_conda
-  - pydantic
   - ffmpeg
-  - numpy
-  - pandas
-  - scipy
-  - pyarrow
-  - opencv
-  - matplotlib
-  - natsort
-  - tqdm
-  # dev packages
-  - black
-  - pytest
-  - mkdocs-material
-  - mkdocstrings-python
-  - pip:
-      - -e "."

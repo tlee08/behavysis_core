@@ -2,20 +2,14 @@
 _summary_
 """
 
+import os
 from typing import Optional, Union
 
-from pydantic import (
-    BaseModel,
-    FilePath,
-    model_validator,
-    field_validator,
-    ConfigDict,
-)
-
 import matplotlib.pyplot as plt
+from pydantic import BaseModel, ConfigDict, FilePath, field_validator, model_validator
 
-from ba_core.utils.constants import DLC_COLUMN_NAMES
 from ba_core.mixins.pydantic_model_mixin import PydanticModelMixin
+from ba_core.utils.constants import DLC_COLUMN_NAMES
 
 
 class ConfigsUnitProcess(BaseModel):
@@ -48,7 +42,7 @@ class ConfigsFormatVid(BaseModel):
 class ConfigsRunDLC(BaseModel):
     """_summary_"""
 
-    dlc_config_path: FilePath = "."
+    dlc_config_path: FilePath = os.path.join(".")  # type: ignore
 
 
 class ConfigsCalculateParams(BaseModel):
@@ -184,7 +178,7 @@ class ConfigsAuto(BaseModel):
     stop_frame: Optional[int] = None
 
 
-class ExperimentConfigs(PydanticModelMixin, BaseModel):
+class ExperimentConfigs(PydanticModelMixin):
     """_summary_"""
 
     user: ConfigsUser = ConfigsUser()

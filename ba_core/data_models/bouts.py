@@ -2,10 +2,11 @@
 _summary_
 """
 
-from typing import List
-from typing import Dict
+from typing import Dict, List
 
 from pydantic import BaseModel
+
+from ba_core.mixins.pydantic_model_mixin import PydanticModelMixin
 
 
 class Bout(BaseModel):
@@ -18,7 +19,7 @@ class Bout(BaseModel):
     user_defined: Dict[str, int]
 
 
-class Bouts(BaseModel):
+class Bouts(PydanticModelMixin, BaseModel):
     """__summary__"""
 
     start: int

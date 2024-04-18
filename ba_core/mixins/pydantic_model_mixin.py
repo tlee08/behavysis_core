@@ -11,7 +11,7 @@ class PydanticModelMixin(BaseModel):
     """Mixin class for Pydantic models (i.e. configs)."""
 
     @classmethod
-    def read_configs(cls, fp: str):
+    def read_json(cls, fp: str):
         """
         Returns the config model from the specified JSON config file.
 
@@ -27,12 +27,12 @@ class PydanticModelMixin(BaseModel):
 
         Example
         -------
-        >>> config = ConfigModel.read_configs("/path/to/config.json")
+        >>> config = ConfigModel.read_json("/path/to/config.json")
         """
         with open(fp, "r", encoding="utf-8") as f:
             return cls.model_validate_json(f.read())
 
-    def write_configs(self, fp: str) -> None:
+    def write_json(self, fp: str) -> None:
         """
         Writes the given configs model to the configs file (i.e. hence updating the file)
 
