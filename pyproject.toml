@@ -1,0 +1,28 @@
+[project]
+name = "ba_core"
+version = "0.1.0"
+description = "The core functionality that supports the `ba` suite"
+readme = "README.md"
+authors = [{ name = "BowenLab" }]
+license = { text = "MIT Licence" }
+requires-python = ">=3.9"
+dependencies = [
+    "pydantic",
+    "numpy",
+    "pandas",
+    "pyarrow",
+    "scipy",
+    "opencv-python",
+    "matplotlib",
+]
+
+[project.urls]
+Homepage = "https://github.com/"
+Repository = "https://github.com/"
+
+[tool.setuptools]
+py-modules = ["ba_core"]
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
