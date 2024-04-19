@@ -29,8 +29,10 @@ class DiagnosticsMixin:
         """
         if not func:
             # Getting the name of the calling function
-            func = currentframe().f_back.f_code.co_name
+            func_name = currentframe().f_back.f_code.co_name
+        else:
+            func_name = func.__name__
         return (
             "WARNING: Output file already exists - not overwriting file.\n"
-            + f"To overwrite, specify `{func.__name__}(..., overwrite=True)`.\n"
+            + f"To overwrite, specify `{func_name}(..., overwrite=True)`.\n"
         )

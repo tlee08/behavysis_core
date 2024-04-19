@@ -8,7 +8,7 @@ import os
 from multiprocessing import current_process
 from subprocess import PIPE, Popen
 
-from ba_core.utils.constants import PROCS, TEMP_DIR
+from ba_core.utils.constants import TEMP_DIR
 
 
 class SubprocessMixin:
@@ -17,10 +17,7 @@ class SubprocessMixin:
     @staticmethod
     def get_cpid() -> int:
         """Get child process ID for multiprocessing."""
-        # Using mod (%) is very hacky, but this works for now
-        return (
-            current_process()._identity[0] % PROCS if current_process()._identity else 0
-        )
+        return current_process()._identity[0] if current_process()._identity else 0
 
     @staticmethod
     def run_subprocess_fstream(cmd: list[str], fp: str = None) -> None:
@@ -37,7 +34,8 @@ class SubprocessMixin:
                 p.wait()
                 # Error handling
                 if p.returncode:
-                    raise ValueError(p.stderr.read().decode())
+                    f.seek(0)
+                    raise ValueError(f.read().decode())
 
     @staticmethod
     def run_subprocess_str(cmd: list[str]) -> str:
@@ -50,3 +48,14 @@ class SubprocessMixin:
             if p.returncode:
                 raise ValueError(err.decode("utf-8"))
             return out.decode("utf-8")
+
+    @staticmethod
+    def run_subprocess_console(cmd: list[str]) -> None:
+        """Run a subprocess and stream the output to a file."""
+        # Starting the subprocess
+        with Popen(cmd) as p:
+            # Wait for the subprocess to finish
+            p.wait()
+            # Error handling
+            if p.returncode:
+                raise ValueError("ERROR: Subprocess failed to run.")

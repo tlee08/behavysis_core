@@ -7,10 +7,8 @@ from __future__ import annotations
 from typing import Union
 
 import cv2
-
-from ba_core.data_models.experiment_configs import ConfigsVidMetadata
+from ba_core.data_models.vid_metadata import VidMetadata
 from ba_core.mixins.subprocess_mixin import SubprocessMixin
-from ba_core.utils.constants import PROCS, TEMP_DIR
 
 
 class ProcessVidMixin:
@@ -69,12 +67,13 @@ class ProcessVidMixin:
             out_fp,
         ]
         # Running ffmpeg command
-        SubprocessMixin.run_subprocess_fstream(cmd)
+        # SubprocessMixin.run_subprocess_fstream(cmd)
+        SubprocessMixin.run_subprocess_console(cmd)
         # Returning outcome
         return outcome
 
     @staticmethod
-    def get_vid_metadata(fp: str) -> ConfigsVidMetadata:
+    def get_vid_metadata(fp: str) -> VidMetadata:
         """
         Finds the video metadata/parameters for either the raw or formatted video.
 
@@ -85,10 +84,10 @@ class ProcessVidMixin:
 
         Returns
         -------
-        ConfigsVidMetadata
+        VidMetadata
             Object containing video metadata.
         """
-        configs_meta = ConfigsVidMetadata()
+        configs_meta = VidMetadata()
         cap = cv2.VideoCapture(fp)
         if not cap.isOpened():
             raise ValueError(

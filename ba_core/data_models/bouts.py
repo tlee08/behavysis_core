@@ -6,7 +6,7 @@ from typing import Dict, List
 
 from pydantic import BaseModel
 
-from ba_core.mixins.pydantic_model_mixin import PydanticModelMixin
+from ba_core.data_models.pydantic_base_model import PydanticBaseModel
 
 
 class Bout(BaseModel):
@@ -19,7 +19,7 @@ class Bout(BaseModel):
     user_defined: Dict[str, int]
 
 
-class Bouts(PydanticModelMixin, BaseModel):
+class Bouts(PydanticBaseModel, BaseModel):
     """__summary__"""
 
     start: int
