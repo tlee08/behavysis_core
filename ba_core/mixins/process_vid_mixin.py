@@ -14,8 +14,6 @@ from ba_core.mixins.subprocess_mixin import SubprocessMixin
 class ProcessVidMixin:
     """__summary__"""
 
-    # TODO
-
     @staticmethod
     def process_vid(
         in_fp: Union[str, None],
@@ -45,6 +43,7 @@ class ProcessVidMixin:
         if fps:
             cmd += ["-r", str(fps)]
             outcome += f"Changing fps to {fps}.\n"
+        # TRIMMING
         if start_sec:
             cmd += ["-ss", str(start_sec)]
             outcome += f"Trimming video from {start_sec} seconds.\n"
@@ -98,4 +97,7 @@ class ProcessVidMixin:
         configs_meta.total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         configs_meta.fps = cap.get(cv2.CAP_PROP_FPS)
         cap.release()
+        return configs_meta
+        return configs_meta
+        return configs_meta
         return configs_meta
