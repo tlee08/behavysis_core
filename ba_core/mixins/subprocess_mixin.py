@@ -8,7 +8,7 @@ import os
 from multiprocessing import current_process
 from subprocess import PIPE, Popen
 
-from ba_core.utils.constants import TEMP_DIR
+from behavysis_core.utils.constants import TEMP_DIR
 
 
 class SubprocessMixin:

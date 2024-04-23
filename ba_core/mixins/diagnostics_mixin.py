@@ -8,8 +8,7 @@ from inspect import currentframe
 from typing import Callable, Optional
 
 import numpy as np
-
-from ba_core.utils.constants import DIAGNOSTICS_SUCCESS_MESSAGES
+from behavysis_core.utils.constants import DIAGNOSTICS_SUCCESS_MESSAGES
 
 
 class DiagnosticsMixin:

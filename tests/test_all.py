@@ -1,8 +1,7 @@
 import os
 
+import behavysis_core
 import pytest
-
-import ba_core
 
 
 def test_all():

@@ -7,8 +7,8 @@ from __future__ import annotations
 from typing import Union
 
 import cv2
-from ba_core.data_models.vid_metadata import VidMetadata
-from ba_core.mixins.subprocess_mixin import SubprocessMixin
+from behavysis_core.data_models.vid_metadata import VidMetadata
+from behavysis_core.mixins.subprocess_mixin import SubprocessMixin
 
 
 class ProcessVidMixin:

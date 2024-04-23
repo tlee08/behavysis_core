@@ -1,4 +1,4 @@
-site_name: ba_core Documentation
+site_name: behavysis_core Documentation
 site_url: ""
 use_directory_urls: false
 
@@ -55,4 +55,4 @@ nav:
   - Diagnostics Messages:
       - diagnostics_messages/diagnostics_messages.md
   - Program Reference:
-      - reference/ba_core.md
+      - reference/behavysis_core.md

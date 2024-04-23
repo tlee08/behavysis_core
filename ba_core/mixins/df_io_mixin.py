@@ -10,8 +10,7 @@ from typing import Callable
 
 import numpy as np
 import pandas as pd
-
-from ba_core.utils.constants import DLC_COLUMN_NAMES, DLC_HDF_KEY
+from behavysis_core.utils.constants import DLC_COLUMN_NAMES, DLC_HDF_KEY
 
 
 class DFIOMixin:

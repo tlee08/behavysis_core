@@ -1,3 +1,3 @@
 # BAExperiment
 
-::: ba_core
+::: behavysis_core

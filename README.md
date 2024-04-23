@@ -1,8 +1,8 @@
-# ba_core
+# behavysis_core
 
-[Documentation](https://tlee08.github.io/ba_core/)
+[Documentation](https://tlee08.github.io/behavysis_core/)
 
-Core functionalities shared across the ba suite.
+Core functionalities shared across the Behavysis suite.
 
 ## Installation
 

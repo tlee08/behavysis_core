@@ -4,9 +4,8 @@ _summary_
 
 from typing import Dict, List
 
+from behavysis_core.data_models.pydantic_base_model import PydanticBaseModel
 from pydantic import BaseModel
-
-from ba_core.data_models.pydantic_base_model import PydanticBaseModel
 
 
 class Bout(BaseModel):
