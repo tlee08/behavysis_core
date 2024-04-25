@@ -8,7 +8,7 @@ from typing import Union
 
 import cv2
 from behavysis_core.data_models.vid_metadata import VidMetadata
-from behavysis_core.mixins.subprocess_mixin import SubprocessMixin
+from behavysis_core.mixins.subproc_mixin import SubprocMixin
 
 
 class ProcessVidMixin:
@@ -66,8 +66,8 @@ class ProcessVidMixin:
             out_fp,
         ]
         # Running ffmpeg command
-        # SubprocessMixin.run_subprocess_fstream(cmd)
-        SubprocessMixin.run_subprocess_console(cmd)
+        # SubprocMixin.run_subproc_fstream(cmd)
+        SubprocMixin.run_subproc_console(cmd)
         # Returning outcome
         return outcome
 

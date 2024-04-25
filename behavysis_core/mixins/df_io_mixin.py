@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import functools
 import os
-from typing import Callable
+from typing import Callable, Union
 
 import numpy as np
 import pandas as pd
@@ -24,13 +24,13 @@ class DFIOMixin:
 
         @functools.wraps(func)
         def wrapper(fp: str, *args, **kwargs):
-            try:
-                return func(fp, *args, **kwargs)
-            except Exception as e:
-                raise ValueError(
-                    f'The file, "{fp}", does not exist or is in an invalid format.'
-                    + "Please check this file."
-                ) from e
+            # try:
+            return func(fp, *args, **kwargs)
+            # except Exception as e:
+            #     raise ValueError(
+            #         f'The file, "{fp}", does not exist or is in an invalid format.'
+            #         + "Please check this file."
+            #     ) from e
 
         return wrapper
 
