@@ -64,3 +64,20 @@ class PydanticBaseModel(BaseModel):
                 f"Invalid value: {v}.\nOption must be one of: {', '.join(closed_set)}"
             )
         return v
+
+    @staticmethod
+    def get_field_names(type_) -> list[tuple[str, ...]]:
+        """
+        Returns the nested field names of the class as
+        a list of tuples.
+        Each tuple is a nested field name combination.
+        """
+        fields = []
+        # For each field in the class
+        for name, type_ in type_.__annotations__.items():
+            if hasattr(type_, '__annotations__'):  # Is a nested class
+                for subfield in PydanticBaseModel.get_field_names(type_):
+                    fields.append((name,) + subfield)
+            else:  # is a primitive field
+                fields.append((name,))
+        return fields
