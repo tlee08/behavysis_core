@@ -46,8 +46,6 @@ BEHAV_PRED_COL = "pred"
 BEHAV_ACTUAL_COL = "actual"
 BEHAV_COLUMN_NAMES = ("behaviours", "outcomes")
 
-# # NEED TO CHANGE THIS FOR DIFFERENT NAMES OF CORNERS
-# ARENAPARTS = ("TopRight", "TopLeft", "BottomRight", "BottomLeft")
 
 ####################################################################################################
 # DIAGNOSTICS CONSTANTS

@@ -8,14 +8,15 @@ from typing import Union
 
 import numpy as np
 import pandas as pd
-from behavysis_core.data_models.bouts import Bouts
-from behavysis_core.utils.constants import (
+from scipy.stats import mode
+
+from behavysis_core.constants import (
     BEHAV_ACTUAL_COL,
     BEHAV_COLUMN_NAMES,
     BEHAV_PRED_COL,
     BEHAV_PROB_COL,
 )
-from scipy.stats import mode
+from behavysis_core.data_models.bouts import Bouts
 
 
 class BehaviourMixin:

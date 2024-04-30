@@ -8,9 +8,9 @@ from typing import Optional
 import matplotlib.pyplot as plt
 from pydantic import BaseModel, ConfigDict, FilePath, field_validator
 
+from behavysis_core.constants import DLC_COLUMN_NAMES
 from behavysis_core.data_models.pydantic_base_model import PydanticBaseModel
 from behavysis_core.data_models.vid_metadata import VidMetadata
-from behavysis_core.utils.constants import DLC_COLUMN_NAMES
 
 
 class ConfigsFormatVid(BaseModel):
@@ -42,7 +42,7 @@ class ConfigsCalculateParams(BaseModel):
 class ConfigsPreprocess(BaseModel):
     """_summary_"""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="allow")
 
 
 class ConfigsExtractFeatures(BaseModel):
@@ -76,7 +76,7 @@ class ConfigsClassifyBehaviours(BaseModel):
 class ConfigsAnalyse(BaseModel):
     """_summary_"""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="allow")
 
     bins_sec: list[int] = [30, 60, 120]
     custom_bins_sec: list[int] = [60, 120, 300, 600]

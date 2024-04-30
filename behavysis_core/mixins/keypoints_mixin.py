@@ -7,7 +7,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from behavysis_core.utils.constants import PROCESS_COL, SINGLE_COL
+from behavysis_core.constants import PROCESS_COL, SINGLE_COL
 
 
 class KeypointsMixin:
