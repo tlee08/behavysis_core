@@ -13,12 +13,6 @@ from behavysis_core.data_models.vid_metadata import VidMetadata
 from behavysis_core.utils.constants import DLC_COLUMN_NAMES
 
 
-class ConfigsUnitProcess(BaseModel):
-    """_summary_"""
-
-    model_config = ConfigDict(extra="allow")
-
-
 class ConfigsFormatVid(BaseModel):
     """_summary_"""
 
@@ -42,15 +36,13 @@ class ConfigsRunDLC(BaseModel):
 class ConfigsCalculateParams(BaseModel):
     """_summary_"""
 
+    model_config = ConfigDict(extra="allow")
+
 
 class ConfigsPreprocess(BaseModel):
     """_summary_"""
 
     model_config = ConfigDict(extra="forbid")
-
-    interpolate_points: ConfigsUnitProcess = ConfigsUnitProcess()
-    bodycentre: ConfigsUnitProcess = ConfigsUnitProcess()
-    refine_identities: ConfigsUnitProcess = ConfigsUnitProcess()
 
 
 class ConfigsExtractFeatures(BaseModel):
@@ -88,13 +80,6 @@ class ConfigsAnalyse(BaseModel):
 
     bins_sec: list[int] = [30, 60, 120]
     custom_bins_sec: list[int] = [60, 120, 300, 600]
-
-    thigmotaxis: Optional[ConfigsUnitProcess] = None
-    center_crossing: Optional[ConfigsUnitProcess] = None
-    speed: Optional[ConfigsUnitProcess] = None
-    social_distance: Optional[ConfigsUnitProcess] = None
-    freezing: Optional[ConfigsUnitProcess] = None
-    in_roi: Optional[ConfigsUnitProcess] = None
 
 
 class ConfigsEvalKeypointsPlot(BaseModel):

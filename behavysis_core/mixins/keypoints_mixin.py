@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+
 from behavysis_core.utils.constants import PROCESS_COL, SINGLE_COL
 
 
@@ -91,3 +92,17 @@ class KeypointsMixin:
         # TODO: is there a better way to group/sort the columns?
         df = df.reindex(columns=df.columns.unique("individuals"), level="individuals")
         return df
+
+    @staticmethod
+    def check_df(df: pd.DataFrame):
+        """
+        Checks whether the dataframe is in the correct format for the keypoints functions.
+        Checks that:
+
+        - There are no null values.
+        """
+        # Checking for null values
+        if df.isnull().values.any():
+            raise ValueError(
+                "The dataframe contains null values. Be sure to run interpolate_points first."
+            )
