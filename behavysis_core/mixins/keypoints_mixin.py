@@ -73,7 +73,7 @@ class KeypointsMixin:
     def clean_headings(df: pd.DataFrame) -> pd.DataFrame:
         """
         Drops the "scorer" level (and any other unnecessary levels) in the column
-        header of the dataframe. This makes analysis easier.
+        header of the dataframe. This makes subsequent processing easier.
 
         Parameters
         ----------

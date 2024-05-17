@@ -2,23 +2,39 @@
 _summary_
 """
 
+from enum import Enum
+
 ####################################################################################################
 # PIPELINE FOLDERS
 ####################################################################################################
 
-FOLDERS = {
-    "0_configs": ".json",
-    "1_raw_vid": ".mp4",
-    "2_formatted_vid": ".mp4",
-    "3_dlc": ".feather",
-    "4_preprocessed": ".feather",
-    "5_features_extracted": ".feather",
-    "6_predicted_behavs": ".feather",
-    "7_scored_behavs": ".feather",
+
+class Folders(Enum):
+    CONFIGS = "0_configs"
+    RAW_VID = "1_raw_vid"
+    FORMATTED_VID = "2_formatted_vid"
+    DLC = "3_dlc"
+    PREPROCESSED = "4_preprocessed"
+    FEATURES_EXTRACTED = "5_features_extracted"
+    PREDICTED_BEHAVS = "6_predicted_behavs"
+    SCORED_BEHAVS = "7_scored_behavs"
+    ANALYSIS = "8_analysis"
+
+
+FILE_EXTS = {
+    Folders.CONFIGS: ".json",
+    Folders.RAW_VID: ".mp4",
+    Folders.FORMATTED_VID: ".mp4",
+    Folders.DLC: ".feather",
+    Folders.PREPROCESSED: ".feather",
+    Folders.FEATURES_EXTRACTED: ".feather",
+    Folders.PREDICTED_BEHAVS: ".feather",
+    Folders.SCORED_BEHAVS: ".feather",
+    Folders.ANALYSIS: ".feather",
 }
 
+
 DIAGNOSTICS_DIR = "diagnostics"
-ANALYSIS_DIR = "analysis"
 EVALUATE_DIR = "evaluate"
 TEMP_DIR = ".temp"
 

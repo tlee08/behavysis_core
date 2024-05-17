@@ -30,7 +30,7 @@ class ConfigsRunDLC(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    dlc_config_path: FilePath = os.path.join(".")  # type: ignore
+    dlc_config_path: str = os.path.join(".")  # FilePath
 
 
 class ConfigsCalculateParams(BaseModel):
@@ -157,7 +157,11 @@ class ConfigsAuto(PydanticBaseModel, BaseModel):
 
     px_per_mm: Optional[float] = None
     start_frame: Optional[int] = None
+    start_sec: Optional[float] = None
     stop_frame: Optional[int] = None
+    stop_sec: Optional[float] = None
+    exp_dur_frames: Optional[int] = None
+    exp_dur_secs: Optional[float] = None
 
 
 class ExperimentConfigs(PydanticBaseModel, BaseModel):

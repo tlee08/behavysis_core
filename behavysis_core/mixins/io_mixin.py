@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import os
 import re
+import shutil
 
 
 class IOMixin:
@@ -21,18 +22,21 @@ class IOMixin:
             path = os.path.join(my_dir, i)
             # If the file has a "." at the start, remove it
             if re.search(r"^\.", i):
-                os.remove(path)
+                IOMixin.silent_rm(path)
 
     @staticmethod
-    def silent_remove(fp: str) -> None:
+    def silent_rm(fp: str) -> None:
         """
-        Removes the given file if it exists.
+        Removes the given file or dir if it exists.
         Does nothing if not.
         Does not throw any errors,
         """
         try:
-            os.remove(fp)
-        except OSError:
+            if os.path.isfile(fp):
+                os.remove(fp)
+            elif os.path.isdir(fp):
+                shutil.rmtree(fp)
+        except (OSError, FileNotFoundError):
             pass
 
     @staticmethod

@@ -41,7 +41,8 @@ class PydanticBaseModel(BaseModel):
         fp : str
             File to save configs to.
         """
-        os.makedirs(os.path.split(fp)[0], exist_ok=True)
+        fp_dir = os.path.dirname(fp)
+        os.makedirs(fp_dir, exist_ok=True) if fp_dir else None
         with open(fp, "w", encoding="utf-8") as f:
             f.write(self.model_dump_json(indent=2))
 
@@ -65,6 +66,7 @@ class PydanticBaseModel(BaseModel):
             )
         return v
 
+    # TODO: convert to class method maybe??
     @staticmethod
     def get_field_names(type_) -> list[tuple[str, ...]]:
         """
@@ -75,7 +77,7 @@ class PydanticBaseModel(BaseModel):
         fields = []
         # For each field in the class
         for name, type_ in type_.__annotations__.items():
-            if hasattr(type_, '__annotations__'):  # Is a nested class
+            if hasattr(type_, "__annotations__"):  # Is a nested class
                 for subfield in PydanticBaseModel.get_field_names(type_):
                     fields.append((name,) + subfield)
             else:  # is a primitive field
