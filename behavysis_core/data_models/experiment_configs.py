@@ -6,7 +6,7 @@ import os
 from typing import Optional
 
 import matplotlib.pyplot as plt
-from pydantic import BaseModel, ConfigDict, FilePath, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from behavysis_core.constants import DLC_COLUMN_NAMES
 from behavysis_core.data_models.pydantic_base_model import PydanticBaseModel
@@ -68,7 +68,8 @@ class ConfigsClassifyBehaviours(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    models: list[FilePath] = []
+    models: list[str] = []  # FilePath
+    pcutoff: float = 0.4
     min_window_frames: int = 1
     user_behavs: list[str] = []
 
