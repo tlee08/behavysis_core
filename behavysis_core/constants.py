@@ -57,9 +57,13 @@ PROCESS_COL = "processed"
 # BEHAVIOUR DATAFRAME CONSTANTS
 ####################################################################################################
 
-BEHAV_PROB_COL = "prob"
-BEHAV_PRED_COL = "pred"
-BEHAV_ACTUAL_COL = "actual"
+
+class BehavColumns(Enum):
+    PROB = "prob"
+    PRED = "pred"
+    ACTUAL = "actual"
+
+
 BEHAV_COLUMN_NAMES = ("behaviours", "outcomes")
 
 

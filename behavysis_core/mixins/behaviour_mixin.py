@@ -11,10 +11,8 @@ import pandas as pd
 from scipy.stats import mode
 
 from behavysis_core.constants import (
-    BEHAV_ACTUAL_COL,
+    BehavColumns,
     BEHAV_COLUMN_NAMES,
-    BEHAV_PRED_COL,
-    BEHAV_PROB_COL,
 )
 from behavysis_core.data_models.bouts import Bouts
 
@@ -70,16 +68,14 @@ class BehaviourMixin:
                     "start": row["start"],
                     "stop": row["stop"],
                     "behaviour": behav,
-                    "actual": int(mode(bout_frames_df[(behav, BEHAV_ACTUAL_COL)]).mode),
+                    "actual": int(
+                        mode(bout_frames_df[(behav, BehavColumns.ACTUAL.value)]).mode
+                    ),
                     "user_defined": {},
                 }
                 # Getting the mode value for the bout (actual, and specific user_behavs)
                 for outcome, values in bout_frames_df[behav].items():
-                    if outcome not in [
-                        BEHAV_PROB_COL,
-                        BEHAV_PRED_COL,
-                        BEHAV_ACTUAL_COL,
-                    ]:
+                    if outcome not in [i.value for i in BehavColumns]:
                         bout_dict["user_defined"][str(outcome)] = int(mode(values).mode)
                 # Making the Bout model object and appending to bouts_ls
                 bouts_ls.append(bout_dict)
@@ -94,21 +90,21 @@ class BehaviourMixin:
     ) -> pd.DataFrame:
         """
         Adding in behaviour-outcomes from the list of user_behavs given.
-        Also adds in the `BEHAV_ACTUAL_COL` behaviour and sets
-        is predicted frames to `BEHAV_ACTUAL_COL` "undecided".
+        Also adds in the `ACTUAL` behaviour and sets
+        is predicted frames to `ACTUAL` "undecided".
 
         Any behaviour-outcomes that are already in `frames_df` will be unchanged.
         """
         frames_df = frames_df.copy()
-        # Adding in BEHAV_ACTUAL_COL and user defined columns (if they don't already exist)
+        # Adding in ACTUAL and user defined columns (if they don't already exist)
         for behav in frames_df.columns.unique(BEHAV_COLUMN_NAMES[0]):
-            # Adding in BEHAV_ACTUAL_COL, and setting all is predicted frames to
+            # Adding in ACTUAL, and setting all is predicted frames to
             # actual "undecided" (i.e. -1)
-            if (behav, BEHAV_ACTUAL_COL) not in frames_df.columns:
-                frames_df[(behav, BEHAV_ACTUAL_COL)] = 0
+            if (behav, BehavColumns.ACTUAL.value) not in frames_df.columns:
+                frames_df[(behav, BehavColumns.ACTUAL.value)] = 0
                 frames_df.loc[
-                    frames_df[(behav, BEHAV_PRED_COL)] == 1,
-                    (behav, BEHAV_ACTUAL_COL),
+                    frames_df[(behav, BehavColumns.PRED.value)] == 1,
+                    (behav, BehavColumns.ACTUAL.value),
                 ] = -1
             # Adding in other user defined behaviours
             for outcome in user_behavs:
@@ -126,7 +122,10 @@ class BehaviourMixin:
         all_behavs = {}  # behav: user_behav_ls pairs
         for bout in bouts.bouts:
             if bout.behaviour not in all_behavs:
-                all_behavs[bout.behaviour] = {BEHAV_PRED_COL, BEHAV_ACTUAL_COL}
+                all_behavs[bout.behaviour] = {
+                    BehavColumns.PRED.value,
+                    BehavColumns.ACTUAL.value,
+                }
             all_behavs[bout.behaviour] |= set(bout.user_defined.keys())
 
         # all_behavs dict to MultiIndex
@@ -145,9 +144,11 @@ class BehaviourMixin:
         for bout in bouts.bouts:
             bout_ret_df = ret_df.loc[bout.start : bout.stop]
             # Filling in predicted behaviour column
-            bout_ret_df.loc[:, (bout.behaviour, BEHAV_PRED_COL)] = 1
+            bout_ret_df.loc[:, (bout.behaviour, BehavColumns.PRED.value)] = 1
             # Filling in actual behaviour column
-            bout_ret_df.loc[:, (bout.behaviour, BEHAV_ACTUAL_COL)] = bout.actual
+            bout_ret_df.loc[:, (bout.behaviour, BehavColumns.ACTUAL.value)] = (
+                bout.actual
+            )
             # Filling in user_behavs columns
             for k, v in bout.user_defined.items():
                 bout_ret_df.loc[:, (bout.behaviour, k)] = v
