@@ -43,13 +43,10 @@ class DFIOMixin:
 
         @functools.wraps(func)
         def wrapper(df, fp: str, *args, **kwargs):
-            try:
-                # Making the directory if it doesn't exist
-                os.makedirs(os.path.split(fp)[0], exist_ok=True)
-                # Writing the file
-                return func(df, fp, *args, **kwargs)
-            except Exception as e:
-                raise ValueError(e) from e
+            # Making the directory if it doesn't exist
+            os.makedirs(os.path.split(fp)[0], exist_ok=True)
+            # Writing the file
+            return func(df, fp, *args, **kwargs)
 
         return wrapper
 
