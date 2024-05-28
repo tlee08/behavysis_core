@@ -8,13 +8,9 @@ from typing import Union
 
 import numpy as np
 import pandas as pd
-from scipy.stats import mode
-
-from behavysis_core.constants import (
-    BehavColumns,
-    BEHAV_COLUMN_NAMES,
-)
+from behavysis_core.constants import BEHAV_COLUMN_NAMES, BehavColumns
 from behavysis_core.data_models.bouts import Bouts
+from scipy.stats import mode
 
 
 class BehaviourMixin:
@@ -46,7 +42,7 @@ class BehaviourMixin:
         bouts_ls = np.column_stack((start, stop)) + offset
         # Making dataframe
         bouts_df = pd.DataFrame(bouts_ls, columns=["start", "stop"])
-        bouts_df["dur"] = bouts_df["stop"] - bouts_df["start"]
+        bouts_df["dur"] = bouts_df["stop"] - bouts_df["start"] + 1
         return bouts_df
 
     @staticmethod
