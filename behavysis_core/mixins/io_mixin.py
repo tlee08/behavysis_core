@@ -73,7 +73,7 @@ class IOMixin:
                 overwrite = kwargs.get(overwrite_var, False)
                 # If overwrite is False, checking if we should skip processing
                 if not overwrite and os.path.exists(out_fp):
-                    return DiagnosticsMixin.warning_msg()
+                    return DiagnosticsMixin.warning_msg(func)
                 # Running the function and returning
                 return func(*args, **kwargs)
 

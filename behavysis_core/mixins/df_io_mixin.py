@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import functools
 import os
-from typing import Callable, Union
+from typing import Callable
 
 import numpy as np
 import pandas as pd
@@ -94,7 +94,7 @@ class DFIOMixin:
 
     @staticmethod
     @write_decorator
-    def write_feather(df: Union[pd.Series, pd.DataFrame], fp: str) -> None:
+    def write_feather(df: pd.Series | pd.DataFrame, fp: str) -> None:
         """
         Writing dataframe feather file.
         """

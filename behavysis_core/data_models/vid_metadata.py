@@ -14,7 +14,7 @@ class VidMetadata(PydanticBaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    fps: Optional[float] = None
-    width_px: Optional[int] = None
-    height_px: Optional[int] = None
-    total_frames: Optional[int] = None
+    fps: Optional[float] | str = None
+    width_px: Optional[int] | str = None
+    height_px: Optional[int] | str = None
+    total_frames: Optional[int] | str = None

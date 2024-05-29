@@ -4,28 +4,27 @@ Utility functions.
 
 from __future__ import annotations
 
-from typing import Union
-
 import numpy as np
 import pandas as pd
 from scipy.stats import mode
 
-from behavysis_core.constants import BEHAV_COLUMN_NAMES, BehavColumns
+from behavysis_core.constants import BEHAV_COLUMN_NAMES, BEHAV_INDEX_NAME, BehavColumns
 from behavysis_core.data_models.bouts import Bouts
+from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
 
 class BehaviourMixin:
     """_summary_"""
 
     @staticmethod
-    def vect_2_bouts(vect: Union[np.ndarray, pd.Series]) -> pd.DataFrame:
+    def vect_2_bouts(vect: np.ndarray | pd.Series) -> pd.DataFrame:
         """
         Will return a dataframe with the start and stop indexes of each contiguous set of
         positive values (i.e. a bout).
 
         Parameters
         ----------
-        vect : Union[np.ndarray, pd.Series]
+        vect : np.ndarray | pd.Series
             Expects a vector of booleans
 
         Returns
@@ -115,7 +114,6 @@ class BehaviourMixin:
         """
         Bouts model object to frames df.
         """
-        ret_df = pd.DataFrame(index=np.arange(bouts.start, bouts.stop))
         # Making columns
         all_behavs = {}  # behav: user_behav_ls pairs
         for bout in bouts.bouts:
@@ -126,17 +124,11 @@ class BehaviourMixin:
                 }
             all_behavs[bout.behaviour] |= set(bout.user_defined.keys())
 
-        # all_behavs dict to MultiIndex
-        columns = pd.MultiIndex.from_tuples(
-            [
-                (behav, outcome)
-                for behav, outcomes in all_behavs.items()
-                for outcome in outcomes
-            ],
-            names=BEHAV_COLUMN_NAMES,
-        )
-        ret_df[columns] = 0
-        ret_df.columns = columns
+        # construct ret_df with index from given start and stop, and all_behavs dict
+        ret_df = BehaviourMixin.init_df(np.arange(bouts.start, bouts.stop))
+        for behav, outcomes in all_behavs.items():
+            for outcome in outcomes:
+                ret_df[(behav, outcome)] = 0
         ret_df = ret_df.sort_index(axis=1)
         # Filling in all user_behavs columns for each behaviour
         for bout in bouts.bouts:
@@ -152,3 +144,61 @@ class BehaviourMixin:
                 bout_ret_df.loc[:, (bout.behaviour, k)] = v
         # Returning frames df
         return ret_df
+
+    @staticmethod
+    def init_df(frame_vect: pd.Series | pd.Index) -> pd.DataFrame:
+        """
+        Returning a frame-by-frame analysis_df with the frame number (according to original video)
+        as the MultiIndex index, relative to the first element of frame_vect.
+        Note that that the frame number can thus begin on a non-zero number.
+
+        Parameters
+        ----------
+        frame_vect : pd.Series | pd.Index
+            _description_
+
+        Returns
+        -------
+        pd.DataFrame
+            _description_
+        """
+        return pd.DataFrame(
+            index=pd.Index(frame_vect, name=BEHAV_INDEX_NAME),
+            columns=pd.MultiIndex.from_tuples((), names=BEHAV_COLUMN_NAMES),
+        )
+
+    @staticmethod
+    def check_df(df: pd.DataFrame) -> None:
+        """
+        Checks whether the dataframe is in the correct format for the keypoints functions.
+
+        Checks that:
+
+        - There are no null values.
+        - The column levels are correct.
+        - The index levels are correct.
+        """
+        # Checking for null values
+        assert (
+            not df.isnull().values.any()
+        ), "The dataframe contains null values. Be sure to run interpolate_points first."
+        # Checking that the index levels are correct
+        assert (
+            df.index.name == BEHAV_INDEX_NAME
+        ), f"The index level is incorrect. They should be {BEHAV_INDEX_NAME}"
+        # Checking that the column levels are correct
+        assert (
+            df.columns.names == BEHAV_COLUMN_NAMES
+        ), f"The column levels are incorrect. They should be {BEHAV_COLUMN_NAMES}."
+
+    @staticmethod
+    def read_feather(fp: str) -> pd.DataFrame:
+        """
+        Reading feather file.
+        """
+        # Reading
+        df = DFIOMixin.read_feather(fp)
+        # Checking
+        BehaviourMixin.check_df(df)
+        # Returning
+        return df

@@ -4,9 +4,10 @@ Utility functions.
 
 from __future__ import annotations
 
-from typing import Union
+from typing import Optional
 
 import cv2
+
 from behavysis_core.data_models.vid_metadata import VidMetadata
 from behavysis_core.mixins.subproc_mixin import SubprocMixin
 
@@ -16,13 +17,13 @@ class ProcessVidMixin:
 
     @staticmethod
     def process_vid(
-        in_fp: Union[str, None],
-        out_fp: Union[str, None],
-        height_px: Union[int, None],
-        width_px: Union[int, None],
-        fps: Union[int, None],
-        start_sec: Union[float, None],
-        stop_sec: Union[float, None],
+        in_fp: Optional[str],
+        out_fp: Optional[str],
+        height_px: Optional[int],
+        width_px: Optional[int],
+        fps: Optional[int],
+        start_sec: Optional[float],
+        stop_sec: Optional[float],
     ) -> str:
         """__summary__"""
         outcome = ""
@@ -97,7 +98,4 @@ class ProcessVidMixin:
         configs_meta.total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         configs_meta.fps = cap.get(cv2.CAP_PROP_FPS)
         cap.release()
-        return configs_meta
-        return configs_meta
-        return configs_meta
         return configs_meta

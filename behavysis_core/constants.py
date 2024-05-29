@@ -20,7 +20,6 @@ class Folders(Enum):
     FEATURES_EXTRACTED = "5_features_extracted"
     PREDICTED_BEHAVS = "6_predicted_behavs"
     SCORED_BEHAVS = "7_scored_behavs"
-    ANALYSIS = "8_analysis"
 
 
 FILE_EXTS = {
@@ -32,10 +31,9 @@ FILE_EXTS = {
     Folders.FEATURES_EXTRACTED: ".feather",
     Folders.PREDICTED_BEHAVS: ".feather",
     Folders.SCORED_BEHAVS: ".feather",
-    Folders.ANALYSIS: ".feather",
 }
 
-
+ANALYSIS_DIR = "8_analysis"
 DIAGNOSTICS_DIR = "diagnostics"
 EVALUATE_DIR = "evaluate"
 TEMP_DIR = ".temp"
@@ -45,9 +43,13 @@ TEMP_DIR = ".temp"
 ####################################################################################################
 
 DLC_COLUMN_NAMES = ("scorer", "individuals", "bodyparts", "coords")
+DLC_INDEX_NAME = "frame"
+
 ANALYSIS_COLUMN_NAMES = ("individuals", "measures")
+ANALYSIS_INDEX_NAME = "frame"
+
 AGG_ANALYSIS_COLUMN_NAMES = (*ANALYSIS_COLUMN_NAMES, "aggs")
-ANALYSIS_INDEX_NAMES = ("frame",)
+AGG_ANALYSIS_INDEX_NAME = ANALYSIS_INDEX_NAME
 
 DLC_HDF_KEY = "data"
 
@@ -70,6 +72,7 @@ class BehavColumns(Enum):
 
 
 BEHAV_COLUMN_NAMES = ("behaviours", "outcomes")
+BEHAV_INDEX_NAME = "frame"
 
 
 ####################################################################################################

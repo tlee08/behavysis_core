@@ -18,11 +18,11 @@ class ConfigsFormatVid(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    width_px: Optional[int] = None
-    height_px: Optional[int] = None
-    fps: Optional[float] = None
-    start_sec: Optional[float] = None
-    stop_sec: Optional[float] = None
+    width_px: Optional[int | str] = None
+    height_px: Optional[int | str] = None
+    fps: Optional[float | str] = None
+    start_sec: Optional[float | str] = None
+    stop_sec: Optional[float | str] = None
 
 
 class ConfigsRunDLC(BaseModel):
@@ -50,8 +50,8 @@ class ConfigsExtractFeatures(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    individuals: list[str] = ["mouse1marked", "mouse2unmarked"]
-    bodyparts: list[str] = [
+    individuals: list[str] | str = ["mouse1marked", "mouse2unmarked"]
+    bodyparts: list[str] | str = [
         "LeftEar",
         "RightEar",
         "Nose",
@@ -68,10 +68,10 @@ class ConfigsClassifyBehaviours(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    models: list[str] = []  # FilePath
-    pcutoff: float = 0.4
-    min_window_frames: int = 1
-    user_behavs: list[str] = []
+    models: list[str] | str = []  # FilePath
+    pcutoff: float | str = 0.4
+    min_window_frames: int | str = 1
+    user_behavs: list[str] | str = []
 
 
 class ConfigsAnalyse(BaseModel):
@@ -79,8 +79,8 @@ class ConfigsAnalyse(BaseModel):
 
     model_config = ConfigDict(extra="allow")
 
-    bins_sec: list[int] = [30, 60, 120]
-    custom_bins_sec: list[int] = [60, 120, 300, 600]
+    bins_sec: list[int] | str = [30, 60, 120]
+    custom_bins_sec: list[int] | str = [60, 120, 300, 600]
 
 
 class ConfigsEvalKeypointsPlot(BaseModel):
@@ -88,7 +88,7 @@ class ConfigsEvalKeypointsPlot(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    bodyparts: list[str] = [
+    bodyparts: list[str] | str = [
         "LeftEar",
         "RightEar",
         "Nose",
@@ -105,10 +105,10 @@ class ConfigsEvalVid(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    funcs: list[str] = ["keypoints"]
-    pcutoff: float = 0.8
+    funcs: list[str] | str = ["keypoints"]
+    pcutoff: float | str = 0.8
     colour_level: str = "individuals"
-    radius: int = 3
+    radius: int | str = 3
     cmap: str = "rainbow"
 
     @field_validator("cmap")
@@ -148,7 +148,7 @@ class ConfigsUser(BaseModel):
     evaluate: ConfigsEvaluate = ConfigsEvaluate()
 
 
-class ConfigsAuto(PydanticBaseModel, BaseModel):
+class ConfigsAuto(PydanticBaseModel):
     """_summary_"""
 
     model_config = ConfigDict(extra="forbid")
@@ -158,17 +158,40 @@ class ConfigsAuto(PydanticBaseModel, BaseModel):
 
     px_per_mm: Optional[float] = None
     start_frame: Optional[int] = None
-    # start_sec: Optional[float] = None
     stop_frame: Optional[int] = None
-    # stop_sec: Optional[float] = None
     exp_dur_frames: Optional[int] = None
-    # exp_dur_secs: Optional[float] = None
 
 
-class ExperimentConfigs(PydanticBaseModel, BaseModel):
+class ConfigsRef(PydanticBaseModel):
+    """_summary_"""
+
+    model_config = ConfigDict(extra="allow")
+
+
+class ExperimentConfigs(PydanticBaseModel):
     """_summary_"""
 
     model_config = ConfigDict(extra="forbid")
 
     user: ConfigsUser = ConfigsUser()
     auto: ConfigsAuto = ConfigsAuto()
+    ref: ConfigsRef = ConfigsRef()
+
+    def get_ref(self, val: str):
+        """
+        If the val is in the reference format, then
+        return reference value of the val if it exists in the reference store.
+        Otherwise, return the val itself.
+        """
+        # Check if the value is in the reference format
+        if isinstance(val, str) and val.startswith("--"):
+            # Remove the '--' from the val
+            val = val[2:]
+            # Check if the value exists in the reference store
+            assert hasattr(
+                self.ref, val
+            ), f"Value '{val}' can't be found in the configs reference section."
+            # Return the reference value
+            return getattr(self.ref, val)
+        # Return the value itself
+        return val

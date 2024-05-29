@@ -7,7 +7,13 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from behavysis_core.constants import PROCESS_COL, SINGLE_COL
+from behavysis_core.constants import (
+    DLC_COLUMN_NAMES,
+    DLC_INDEX_NAME,
+    PROCESS_COL,
+    SINGLE_COL,
+)
+from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
 
 class KeypointsMixin:
@@ -70,6 +76,28 @@ class KeypointsMixin:
         return indivs, bpts
 
     @staticmethod
+    def init_df(frame_vect: pd.Series | pd.Index) -> pd.DataFrame:
+        """
+        Returning a frame-by-frame analysis_df with the frame number (according to original video)
+        as the MultiIndex index, relative to the first element of frame_vect.
+        Note that that the frame number can thus begin on a non-zero number.
+
+        Parameters
+        ----------
+        frame_vect : pd.Series | pd.Index
+            _description_
+
+        Returns
+        -------
+        pd.DataFrame
+            _description_
+        """
+        return pd.DataFrame(
+            index=pd.Index(frame_vect, name=DLC_INDEX_NAME),
+            columns=pd.MultiIndex.from_tuples((), names=DLC_COLUMN_NAMES),
+        )
+
+    @staticmethod
     def clean_headings(df: pd.DataFrame) -> pd.DataFrame:
         """
         Drops the "scorer" level (and any other unnecessary levels) in the column
@@ -93,15 +121,37 @@ class KeypointsMixin:
         return df
 
     @staticmethod
-    def check_df(df: pd.DataFrame):
+    def check_df(df: pd.DataFrame) -> None:
         """
         Checks whether the dataframe is in the correct format for the keypoints functions.
+
         Checks that:
 
         - There are no null values.
+        - The column levels are correct.
+        - The index levels are correct.
         """
         # Checking for null values
-        if df.isnull().values.any():
-            raise ValueError(
-                "The dataframe contains null values. Be sure to run interpolate_points first."
-            )
+        assert (
+            not df.isnull().values.any()
+        ), "The dataframe contains null values. Be sure to run interpolate_points first."
+        # Checking that the index levels are correct
+        assert (
+            df.index.name == DLC_INDEX_NAME
+        ), f"The index level is incorrect. They should be {DLC_INDEX_NAME}"
+        # Checking that the column levels are correct
+        assert (
+            df.columns.names == DLC_COLUMN_NAMES
+        ), f"The column levels are incorrect. They should be {DLC_COLUMN_NAMES}."
+
+    @staticmethod
+    def read_feather(fp: str) -> pd.DataFrame:
+        """
+        Reading feather file.
+        """
+        # Reading
+        df = DFIOMixin.read_feather(fp)
+        # Checking
+        KeypointsMixin.check_df(df)
+        # Returning
+        return df

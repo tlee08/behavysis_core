@@ -4,7 +4,6 @@ Utility functions.
 
 from __future__ import annotations
 
-from inspect import currentframe
 from typing import Callable, Optional
 
 import numpy as np
@@ -29,7 +28,7 @@ class DiagnosticsMixin:
         """
         if not func:
             # Getting the name of the calling function
-            func_name = currentframe().f_back.f_code.co_name
+            func_name = "func"
         else:
             func_name = func.__name__
         return (
