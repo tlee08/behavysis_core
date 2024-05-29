@@ -8,9 +8,10 @@ from typing import Union
 
 import numpy as np
 import pandas as pd
+from scipy.stats import mode
+
 from behavysis_core.constants import BEHAV_COLUMN_NAMES, BehavColumns
 from behavysis_core.data_models.bouts import Bouts
-from scipy.stats import mode
 
 
 class BehaviourMixin:
@@ -34,7 +35,8 @@ class BehaviourMixin:
         """
         offset = 0
         if isinstance(vect, pd.Series):
-            offset = vect.index[0]
+            if vect.shape[0] > 0:
+                offset = vect.index[0]
         # Getting stop and start indexes of each bout
         z = np.concatenate(([0], vect, [0]))
         start = np.flatnonzero(~z[:-1] & z[1:])
@@ -87,7 +89,7 @@ class BehaviourMixin:
         """
         Adding in behaviour-outcomes from the list of user_behavs given.
         Also adds in the `ACTUAL` behaviour and sets
-        is predicted frames to `ACTUAL` "undecided".
+        is predicted frames of `ACTUAL` to "undecided".
 
         Any behaviour-outcomes that are already in `frames_df` will be unchanged.
         """
@@ -135,7 +137,7 @@ class BehaviourMixin:
         )
         ret_df[columns] = 0
         ret_df.columns = columns
-        ret_df = ret_df.reindex(columns=sorted(ret_df.columns))
+        ret_df = ret_df.sort_index(axis=1)
         # Filling in all user_behavs columns for each behaviour
         for bout in bouts.bouts:
             bout_ret_df = ret_df.loc[bout.start : bout.stop]

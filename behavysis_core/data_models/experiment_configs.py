@@ -20,7 +20,7 @@ class ConfigsFormatVid(BaseModel):
 
     width_px: Optional[int] = None
     height_px: Optional[int] = None
-    fps: Optional[int] = None
+    fps: Optional[float] = None
     start_sec: Optional[float] = None
     stop_sec: Optional[float] = None
 

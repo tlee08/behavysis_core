@@ -89,8 +89,7 @@ class KeypointsMixin:
         # Removing the scorer column because all values are identical
         df.columns = df.columns.droplevel("scorer")
         # Grouping the columns by the individuals level for cleaner presentation
-        # TODO: is there a better way to group/sort the columns?
-        df = df.reindex(columns=df.columns.unique("individuals"), level="individuals")
+        df = df.sort_index(axis=1)
         return df
 
     @staticmethod

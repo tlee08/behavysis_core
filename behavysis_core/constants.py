@@ -10,6 +10,8 @@ from enum import Enum
 
 
 class Folders(Enum):
+    """Enum for the pipeline folders."""
+
     CONFIGS = "0_configs"
     RAW_VID = "1_raw_vid"
     FORMATTED_VID = "2_formatted_vid"
@@ -44,7 +46,8 @@ TEMP_DIR = ".temp"
 
 DLC_COLUMN_NAMES = ("scorer", "individuals", "bodyparts", "coords")
 ANALYSIS_COLUMN_NAMES = ("individuals", "measures")
-ANALYSIS_INDEX_NAMES = ("frame", "timestamp")
+AGG_ANALYSIS_COLUMN_NAMES = (*ANALYSIS_COLUMN_NAMES, "aggs")
+ANALYSIS_INDEX_NAMES = ("frame",)
 
 DLC_HDF_KEY = "data"
 
@@ -59,6 +62,8 @@ PROCESS_COL = "processed"
 
 
 class BehavColumns(Enum):
+    """Enum for the columns in the behaviour dataframe."""
+
     PROB = "prob"
     PRED = "pred"
     ACTUAL = "actual"
@@ -89,6 +94,7 @@ DIAGNOSTICS_SUCCESS_MESSAGES = (
     "You're a champion!",
     "No task too tall :) :)",
     "A job done well, and a well done job!",
+    "Top job!",
 )
 
 STR_DIV = "".ljust(50, "-")

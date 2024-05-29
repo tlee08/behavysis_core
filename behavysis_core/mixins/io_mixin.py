@@ -4,9 +4,13 @@ Utility functions.
 
 from __future__ import annotations
 
+import functools
 import os
 import re
 import shutil
+from typing import Any, Callable
+
+from behavysis_core.mixins.diagnostics_mixin import DiagnosticsMixin
 
 
 class IOMixin:
@@ -49,3 +53,30 @@ class IOMixin:
         ```
         """
         return os.path.splitext(os.path.basename(fp))[0]
+
+    @staticmethod
+    def overwrite_check(
+        out_fp_var: str = "out_fp", overwrite_var: str = "overwrite"
+    ) -> Callable[[Any], str]:
+        """
+        Decorator to check if we should skip processing (i.e. not overwrite the file).
+        Returns the function early if we should skip.
+        """
+
+        def decorator(func: Callable[[Any], str]) -> Callable[[Any], str]:
+            """__summary__"""
+
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs) -> str:
+                """__summary__"""
+                out_fp = kwargs.get(out_fp_var, False)
+                overwrite = kwargs.get(overwrite_var, False)
+                # If overwrite is False, checking if we should skip processing
+                if not overwrite and os.path.exists(out_fp):
+                    return DiagnosticsMixin.warning_msg()
+                # Running the function and returning
+                return func(*args, **kwargs)
+
+            return wrapper
+
+        return decorator
