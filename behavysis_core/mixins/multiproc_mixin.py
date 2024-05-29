@@ -4,6 +4,7 @@ Utility functions.
 
 from __future__ import annotations
 
+import logging
 import re
 import subprocess
 from multiprocessing import current_process
@@ -29,5 +30,5 @@ class MultiprocMixin:
             gpu_ids = re.findall(r"GPU (\d+):", smi_output)
             return gpu_ids
         except subprocess.CalledProcessError as e:
-            print(f"Error occurred: {e}")
+            logging.info("Error occurred: %s", e)
             return []

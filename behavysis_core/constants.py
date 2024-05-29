@@ -34,8 +34,8 @@ FILE_EXTS = {
 }
 
 ANALYSIS_DIR = "8_analysis"
-DIAGNOSTICS_DIR = "diagnostics"
-EVALUATE_DIR = "evaluate"
+DIAGNOSTICS_DIR = "0_diagnostics"
+EVALUATE_DIR = "9_evaluate"
 TEMP_DIR = ".temp"
 
 ####################################################################################################

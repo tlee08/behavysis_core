@@ -25,13 +25,3 @@ class Bouts(PydanticBaseModel, BaseModel):
     start: int
     stop: int
     bouts: List[Bout]
-
-
-if __name__ == "__main__":
-    fp = (
-        "/Users/timothylee/Desktop/Work/dev/ba_viewer/tests/resources/updated_abcd.json"
-    )
-
-    with open(fp, "r", encoding="utf-8") as f:
-        model = Bouts.model_validate_json(f.read())
-        print(model)
