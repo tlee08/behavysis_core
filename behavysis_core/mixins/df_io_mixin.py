@@ -17,7 +17,7 @@ from behavysis_core.constants import DLC_COLUMN_NAMES, DLC_HDF_KEY
 class DFIOMixin:
     """__summary"""
 
-    # @staticmethod
+    @staticmethod
     def read_decorator(
         func: Callable[[str], pd.DataFrame]
     ) -> Callable[[str], pd.DataFrame]:
@@ -35,7 +35,7 @@ class DFIOMixin:
 
         return wrapper
 
-    # @staticmethod
+    @staticmethod
     def write_decorator(
         func: Callable[[pd.DataFrame, str], None]
     ) -> Callable[[pd.DataFrame, str], None]:
@@ -99,3 +99,13 @@ class DFIOMixin:
         Writing dataframe feather file.
         """
         df.to_feather(fp)
+
+    @staticmethod
+    def check_df(df: pd.DataFrame) -> None:
+        """__summary__"""
+        assert isinstance(df, pd.DataFrame), "The dataframe is not a pandas DataFrame."
+
+    @staticmethod
+    def init_df(frame_vect: pd.Series | pd.Index) -> pd.DataFrame:
+        """__summary__"""
+        return pd.DataFrame(index=frame_vect)
