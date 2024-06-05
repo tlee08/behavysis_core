@@ -7,11 +7,11 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from behavysis_core.constants import KEYPOINTS_CN, KEYPOINTS_IN, IndivColumns
+from behavysis_core.constants import FEATURES_CN, FEATURES_IN, IndivColumns
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
 
-class KeypointsMixin:
+class FeaturesMixin:
     """__summary__"""
 
     @staticmethod
@@ -71,29 +71,6 @@ class KeypointsMixin:
         return indivs, bpts
 
     @staticmethod
-    def clean_headings(df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Drops the "scorer" level (and any other unnecessary levels) in the column
-        header of the dataframe. This makes subsequent processing easier.
-
-        Parameters
-        ----------
-        df : pd.DataFrame
-            Keypoints pd.DataFrame.
-
-        Returns
-        -------
-        pd.DataFrame
-            Keypoints pd.DataFrame.
-        """
-        df = df.copy()
-        # Removing the scorer column because all values are identical
-        df.columns = df.columns.droplevel("scorer")
-        # Grouping the columns by the individuals level for cleaner presentation
-        df = df.sort_index(axis=1)
-        return df
-
-    @staticmethod
     def init_df(frame_vect: pd.Series | pd.Index) -> pd.DataFrame:
         """
         Returning a frame-by-frame analysis_df with the frame number (according to original video)
@@ -111,8 +88,8 @@ class KeypointsMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=KEYPOINTS_IN),
-            columns=pd.MultiIndex.from_tuples((), names=KEYPOINTS_CN),
+            index=pd.Index(frame_vect, name=FEATURES_IN),
+            columns=pd.MultiIndex.from_tuples((), names=FEATURES_CN),
         )
 
     @staticmethod
@@ -131,9 +108,9 @@ class KeypointsMixin:
             not df.isnull().values.any()
         ), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
-        DFIOMixin.check_df_index_names(df, KEYPOINTS_IN)
+        DFIOMixin.check_df_index_names(df, FEATURES_IN)
         # Checking that the column levels are correct
-        DFIOMixin.check_df_column_names(df, KEYPOINTS_CN)
+        DFIOMixin.check_df_column_names(df, FEATURES_CN)
 
     @staticmethod
     def read_feather(fp: str) -> pd.DataFrame:
@@ -143,6 +120,6 @@ class KeypointsMixin:
         # Reading
         df = DFIOMixin.read_feather(fp)
         # Checking
-        KeypointsMixin.check_df(df)
+        FeaturesMixin.check_df(df)
         # Returning
         return df

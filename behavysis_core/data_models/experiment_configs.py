@@ -8,7 +8,7 @@ from typing import Optional
 import matplotlib.pyplot as plt
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from behavysis_core.constants import DLC_COLUMN_NAMES
+from behavysis_core.constants import KEYPOINTS_CN
 from behavysis_core.data_models.pydantic_base_model import PydanticBaseModel
 from behavysis_core.data_models.vid_metadata import VidMetadata
 
@@ -121,7 +121,7 @@ class ConfigsEvalVid(BaseModel):
     @classmethod
     def validate_colour_level(cls, v):
         """_summary_"""
-        return PydanticBaseModel.validate_attr_closed_set(v, DLC_COLUMN_NAMES)
+        return PydanticBaseModel.validate_attr_closed_set(v, KEYPOINTS_CN)
 
 
 class ConfigsEvaluate(BaseModel):

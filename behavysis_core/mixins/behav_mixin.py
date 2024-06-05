@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import mode
 
-from behavysis_core.constants import BEHAV_COLUMN_NAMES, BEHAV_INDEX_NAME, BehavColumns
+from behavysis_core.constants import BEHAV_CN, BEHAV_IN, BehavColumns
 from behavysis_core.data_models.bouts import Bouts
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
@@ -53,7 +53,7 @@ class BehavMixin:
         """
         bouts_ls = []
         # For each behaviour
-        for behav in frames_df.columns.unique(BEHAV_COLUMN_NAMES[0]):
+        for behav in frames_df.columns.unique(BEHAV_CN[0]):
             # Getting start-stop of each bout
             start_stop_df = BehavMixin.vect_2_bouts(frames_df[(behav, "pred")])
             # For each bout (i.e. start-stop pair)
@@ -94,7 +94,7 @@ class BehavMixin:
         """
         frames_df = frames_df.copy()
         # Adding in ACTUAL and user defined columns (if they don't already exist)
-        for behav in frames_df.columns.unique(BEHAV_COLUMN_NAMES[0]):
+        for behav in frames_df.columns.unique(BEHAV_CN[0]):
             # Adding in ACTUAL, and setting all is predicted frames to
             # actual "undecided" (i.e. -1)
             if (behav, BehavColumns.ACTUAL.value) not in frames_df.columns:
@@ -163,8 +163,8 @@ class BehavMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=BEHAV_INDEX_NAME),
-            columns=pd.MultiIndex.from_tuples((), names=BEHAV_COLUMN_NAMES),
+            index=pd.Index(frame_vect, name=BEHAV_IN),
+            columns=pd.MultiIndex.from_tuples((), names=BEHAV_CN),
         )
 
     @staticmethod
@@ -183,13 +183,9 @@ class BehavMixin:
             not df.isnull().values.any()
         ), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
-        assert (
-            df.index.name == BEHAV_INDEX_NAME
-        ), f"The index level is incorrect. They should be {BEHAV_INDEX_NAME}"
+        DFIOMixin.check_df_index_names(df, BEHAV_IN)
         # Checking that the column levels are correct
-        assert (
-            df.columns.names == BEHAV_COLUMN_NAMES
-        ), f"The column levels are incorrect. They should be {BEHAV_COLUMN_NAMES}."
+        DFIOMixin.check_df_column_names(df, BEHAV_CN)
 
     @staticmethod
     def read_feather(fp: str) -> pd.DataFrame:

@@ -39,24 +39,30 @@ EVALUATE_DIR = "9_evaluate"
 TEMP_DIR = ".temp"
 
 ####################################################################################################
-# DLC DATAFRAME CONSTANTS
+# KEYPOINTS DATAFRAME CONSTANTS
 ####################################################################################################
 
-DLC_COLUMN_NAMES = ("scorer", "individuals", "bodyparts", "coords")
-DLC_INDEX_NAME = "frame"
+FRAMES_IN = "frame"
 
-ANALYSIS_COLUMN_NAMES = ("individuals", "measures")
-ANALYSIS_INDEX_NAME = "frame"
-
-AGG_ANALYSIS_COLUMN_NAMES = (*ANALYSIS_COLUMN_NAMES, "aggs")
-AGG_ANALYSIS_INDEX_NAME = ANALYSIS_INDEX_NAME
+KEYPOINTS_CN = ("scorer", "individuals", "bodyparts", "coords")
+KEYPOINTS_IN = FRAMES_IN
 
 DLC_HDF_KEY = "data"
 
-BODYCENTRE = "Centre"
 
-SINGLE_COL = "single"
-PROCESS_COL = "processed"
+class IndivColumns(Enum):
+    """Enum for the individuals level in the columns of the DLC Keypoints dataframe."""
+
+    SINGLE = "single"
+    PROCESS = "processed"
+
+
+####################################################################################################
+# EXTRACTED FEATURES DATAFRAME CONSTANTS
+####################################################################################################
+
+FEATURES_CN = "features"
+FEATURES_IN = FRAMES_IN
 
 ####################################################################################################
 # BEHAVIOUR DATAFRAME CONSTANTS
@@ -71,9 +77,18 @@ class BehavColumns(Enum):
     ACTUAL = "actual"
 
 
-BEHAV_COLUMN_NAMES = ("behaviours", "outcomes")
-BEHAV_INDEX_NAME = "frame"
+BEHAV_CN = ("behaviours", "outcomes")
+BEHAV_IN = FRAMES_IN
 
+####################################################################################################
+# ANALYSIS DATAFRAME CONSTANTS
+####################################################################################################
+
+ANALYSIS_CN = ("individuals", "measures")
+ANALYSIS_IN = FRAMES_IN
+
+AGG_ANALYSIS_CN = (*ANALYSIS_CN, "aggs")
+AGG_ANALYSIS_IN = FRAMES_IN
 
 ####################################################################################################
 # DIAGNOSTICS CONSTANTS

@@ -11,11 +11,15 @@ from typing import Callable
 import numpy as np
 import pandas as pd
 
-from behavysis_core.constants import DLC_COLUMN_NAMES, DLC_HDF_KEY
+from behavysis_core.constants import DLC_HDF_KEY, KEYPOINTS_CN
 
 
 class DFIOMixin:
     """__summary"""
+
+    ###############################################################################################
+    # DF Read/Write functions
+    ###############################################################################################
 
     @staticmethod
     def read_decorator(
@@ -57,7 +61,7 @@ class DFIOMixin:
         Reading DLC csv file.
         """
         return pd.read_csv(
-            fp, header=np.arange(len(DLC_COLUMN_NAMES)).tolist(), index_col=0
+            fp, header=np.arange(len(KEYPOINTS_CN)).tolist(), index_col=0
         ).sort_index()
 
     @staticmethod
@@ -100,12 +104,36 @@ class DFIOMixin:
         """
         df.to_feather(fp)
 
+    ###############################################################################################
+    # DF Init functions
+    ###############################################################################################
+
+    @staticmethod
+    def init_df(frame_vect: pd.Series | pd.Index) -> pd.DataFrame:
+        """__summary__"""
+        return pd.DataFrame(index=frame_vect)
+
+    ###############################################################################################
+    # Check functions
+    ###############################################################################################
+
     @staticmethod
     def check_df(df: pd.DataFrame) -> None:
         """__summary__"""
         assert isinstance(df, pd.DataFrame), "The dataframe is not a pandas DataFrame."
 
     @staticmethod
-    def init_df(frame_vect: pd.Series | pd.Index) -> pd.DataFrame:
+    def check_df_column_names(df: pd.DataFrame, levels: tuple[str] | str) -> None:
         """__summary__"""
-        return pd.DataFrame(index=frame_vect)
+        levels = (levels,) if isinstance(levels, str) else levels
+        assert (
+            df.columns.names == levels
+        ), f"The index level is incorrect. They should be {levels}, not {df.columns.name}."
+
+    @staticmethod
+    def check_df_index_names(df: pd.DataFrame, levels: tuple[str] | str) -> None:
+        """__summary__"""
+        levels = (levels,) if isinstance(levels, str) else levels
+        assert (
+            df.index.names == levels
+        ), f"The index level is incorrect. They should be {levels}, not {df.index.name}."
