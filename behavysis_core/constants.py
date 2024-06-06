@@ -54,7 +54,7 @@ class IndivColumns(Enum):
     """Enum for the individuals level in the columns of the DLC Keypoints dataframe."""
 
     SINGLE = "single"
-    PROCESS = "processed"
+    PROCESS = "processed"  # TODO: remove this
 
 
 ####################################################################################################
