@@ -30,7 +30,7 @@ class ConfigsRunDLC(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    dlc_config_path: str = os.path.join(".")  # FilePath
+    model_fp: str = os.path.join(".")  # FilePath
 
 
 class ConfigsCalculateParams(BaseModel):
@@ -63,13 +63,13 @@ class ConfigsExtractFeatures(BaseModel):
     ]
 
 
-class ConfigsClassifyBehaviours(BaseModel):
+class ConfigsClassifyBehav(BaseModel):
     """_summary_"""
 
     model_config = ConfigDict(extra="forbid")
 
-    models: list[str] | str = []  # FilePath
-    pcutoff: float | str = 0.4
+    model_fp: str = os.path.join(".")  # FilePath
+    pcutoff: float | str | None = None
     min_window_frames: int | str = 1
     user_behavs: list[str] | str = []
 
@@ -143,7 +143,7 @@ class ConfigsUser(BaseModel):
     calculate_params: ConfigsCalculateParams = ConfigsCalculateParams()
     preprocess: ConfigsPreprocess = ConfigsPreprocess()
     extract_features: ConfigsExtractFeatures = ConfigsExtractFeatures()
-    classify_behaviours: ConfigsClassifyBehaviours = ConfigsClassifyBehaviours()
+    classify_behaviours: list[ConfigsClassifyBehav] = list()
     analyse: ConfigsAnalyse = ConfigsAnalyse()
     evaluate: ConfigsEvaluate = ConfigsEvaluate()
 

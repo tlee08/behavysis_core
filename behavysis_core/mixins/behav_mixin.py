@@ -11,6 +11,7 @@ from scipy.stats import mode
 from behavysis_core.constants import BEHAV_CN, BEHAV_IN, BehavColumns
 from behavysis_core.data_models.bouts import Bouts
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
+from behavysis_core.data_models.experiment_configs import ExperimentConfigs
 
 
 class BehavMixin:
@@ -81,33 +82,34 @@ class BehavMixin:
             start=frames_df.index[0], stop=frames_df.index[-1] + 1, bouts=bouts_ls
         )
 
-    @staticmethod
-    def frames_add_behaviour(
-        frames_df: pd.DataFrame, user_behavs: list[str]
-    ) -> pd.DataFrame:
-        """
-        Adding in behaviour-outcomes from the list of user_behavs given.
-        Also adds in the `ACTUAL` behaviour and sets
-        is predicted frames of `ACTUAL` to "undecided".
+    # OLD as user_behavs is not behav specific
+    # @staticmethod
+    # def frames_add_behaviour(
+    #     frames_df: pd.DataFrame, user_behavs: list[str]
+    # ) -> pd.DataFrame:
+    #     """
+    #     Adding in behaviour-outcomes from the list of user_behavs given.
+    #     Also adds in the `ACTUAL` behaviour and sets
+    #     is predicted frames of `ACTUAL` to "undecided".
 
-        Any behaviour-outcomes that are already in `frames_df` will be unchanged.
-        """
-        frames_df = frames_df.copy()
-        # Adding in ACTUAL and user defined columns (if they don't already exist)
-        for behav in frames_df.columns.unique(BEHAV_CN[0]):
-            # Adding in ACTUAL, and setting all is predicted frames to
-            # actual "undecided" (i.e. -1)
-            if (behav, BehavColumns.ACTUAL.value) not in frames_df.columns:
-                frames_df[(behav, BehavColumns.ACTUAL.value)] = 0
-                frames_df.loc[
-                    frames_df[(behav, BehavColumns.PRED.value)] == 1,
-                    (behav, BehavColumns.ACTUAL.value),
-                ] = -1
-            # Adding in other user defined behaviours
-            for outcome in user_behavs:
-                if (behav, outcome) not in frames_df.columns:
-                    frames_df[(behav, outcome)] = 0
-        return frames_df
+    #     Any behaviour-outcomes that are already in `frames_df` will be unchanged.
+    #     """
+    #     frames_df = frames_df.copy()
+    #     # Adding in ACTUAL and user defined columns (if they don't already exist)
+    #     for behav in frames_df.columns.unique(BEHAV_CN[0]):
+    #         # Adding in ACTUAL, and setting all is predicted frames to
+    #         # actual "undecided" (i.e. -1)
+    #         if (behav, BehavColumns.ACTUAL.value) not in frames_df.columns:
+    #             frames_df[(behav, BehavColumns.ACTUAL.value)] = 0
+    #             frames_df.loc[
+    #                 frames_df[(behav, BehavColumns.PRED.value)] == 1,
+    #                 (behav, BehavColumns.ACTUAL.value),
+    #             ] = -1
+    #         # Adding in other user defined behaviours
+    #         for outcome in user_behavs:
+    #             if (behav, outcome) not in frames_df.columns:
+    #                 frames_df[(behav, outcome)] = 0
+    #     return frames_df
 
     @staticmethod
     def bouts_2_frames(bouts: Bouts) -> pd.DataFrame:
@@ -179,9 +181,7 @@ class BehavMixin:
         - The index levels are correct.
         """
         # Checking for null values
-        assert (
-            not df.isnull().values.any()
-        ), "The dataframe contains null values. Be sure to run interpolate_points first."
+        assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
         DFIOMixin.check_df_index_names(df, BEHAV_IN)
         # Checking that the column levels are correct
@@ -197,4 +197,47 @@ class BehavMixin:
         # Checking
         BehavMixin.check_df(df)
         # Returning
+        return df
+
+    @staticmethod
+    def update_behav(df: pd.DataFrame, behav_src: str, behav_dst: str) -> pd.DataFrame:
+        """
+        Update the behaviour column with the given outcome and value.
+        """
+        # Getting columns
+        columns = df.columns.to_frame(index=False)
+        # Updating the behaviour column
+        columns[BEHAV_CN[0]] = columns[BEHAV_CN[0]].map(
+            lambda x: behav_dst if x == behav_src else x
+        )
+        # Setting the new columns
+        df.columns = pd.MultiIndex.from_frame(columns)
+        # Returning
+        return df
+
+    @staticmethod
+    def import_boris_tsv(boris_fp: str, configs_fp: str, behavs_ls) -> pd.DataFrame:
+        """
+        Importing Boris TSV file.
+        """
+        # Making df structure
+        configs = ExperimentConfigs.read_json(configs_fp)
+        start = configs.get_ref(configs.auto.start_frame)
+        stop = configs.get_ref(configs.auto.stop_frame) + 1
+        df = BehavMixin.init_df(np.arange(start, stop))
+        # Reading in corresponding BORIS tsv file
+        df_boris = pd.read_csv(boris_fp, sep="\t")
+        # Initialising new classification column based on BORIS filename and behaviour name
+        for behav in behavs_ls:
+            df[(behav, BehavColumns.ACTUAL.value)] = 0
+        # Setting the classification values from the BORIS file
+        for ind, row in df_boris.iterrows():
+            # Getting corresponding frame of this event point
+            behav = (row["Behavior"], BehavColumns.ACTUAL.value)
+            frame = row["Image index"]
+            status = row["Behavior type"]
+            # Updating the classification in the scored df
+            df.loc[frame:, behav] = status == "START"
+        # Setting dtype to int8
+        df = df.astype(np.int8)
         return df
