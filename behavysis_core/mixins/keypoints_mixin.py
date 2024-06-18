@@ -88,7 +88,10 @@ class KeypointsMixin:
         """
         df = df.copy()
         # Removing the scorer column because all values are identical
-        df.columns = df.columns.droplevel("scorer")
+        # Keeping only the "individuals", "bodyparts", and "coords" levels (i.e. dropping "scorer")
+        columns = df.columns.to_frame(index=False)
+        columns = columns[KEYPOINTS_CN[1:]]
+        df.columns = pd.MultiIndex.from_frame(columns)
         # Grouping the columns by the individuals level for cleaner presentation
         df = df.sort_index(axis=1)
         return df
@@ -127,9 +130,7 @@ class KeypointsMixin:
         - The index levels are correct.
         """
         # Checking for null values
-        assert (
-            not df.isnull().values.any()
-        ), "The dataframe contains null values. Be sure to run interpolate_points first."
+        assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
         DFIOMixin.check_df_index_names(df, KEYPOINTS_IN)
         # Checking that the column levels are correct

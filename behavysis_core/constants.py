@@ -42,16 +42,31 @@ TEMP_DIR = ".temp"
 # KEYPOINTS DATAFRAME CONSTANTS
 ####################################################################################################
 
-FRAMES_IN = "frame"
 
-KEYPOINTS_CN = ("scorer", "individuals", "bodyparts", "coords")
-KEYPOINTS_IN = FRAMES_IN
+class FramesIN(Enum):
+    """Enum for the index in frame-by-frame dataframe."""
+
+    FRAME = "frame"
+
+
+class KeypointsCN(Enum):
+    """Enum for the columns in the keypoints dataframe."""
+
+    ("scorer", "individuals", "bodyparts", "coords")
+
+    SCORER = "scorer"
+    INDIVIDUALS = "individuals"
+    BODYPARTS = "bodyparts"
+    COORDS = "coords"
+
+
+KeypointsIN = FramesIN
 
 DLC_HDF_KEY = "data"
 
 
 class IndivColumns(Enum):
-    """Enum for the individuals level in the columns of the DLC Keypoints dataframe."""
+    """Enum for the individuals level in the columns of the keypoints dataframe."""
 
     SINGLE = "single"
     PROCESS = "processed"  # TODO: remove this
@@ -61,12 +76,28 @@ class IndivColumns(Enum):
 # EXTRACTED FEATURES DATAFRAME CONSTANTS
 ####################################################################################################
 
-FEATURES_CN = "features"
-FEATURES_IN = FRAMES_IN
+
+class FeaturesCN(Enum):
+    """Enum for the columns in the extracted features dataframe."""
+
+    FEATURES = "features"
+
+
+FeaturesIN = FramesIN
 
 ####################################################################################################
 # BEHAVIOUR DATAFRAME CONSTANTS
 ####################################################################################################
+
+
+class BehavCN(Enum):
+    """Enum for the columns in the behaviour dataframe."""
+
+    BEHAVIOURS = "behaviours"
+    OUTCOMES = "outcomes"
+
+
+BEHAV_IN = FramesIN
 
 
 class BehavColumns(Enum):
@@ -77,18 +108,30 @@ class BehavColumns(Enum):
     ACTUAL = "actual"
 
 
-BEHAV_CN = ("behaviours", "outcomes")
-BEHAV_IN = FRAMES_IN
-
 ####################################################################################################
 # ANALYSIS DATAFRAME CONSTANTS
 ####################################################################################################
 
-ANALYSIS_CN = ("individuals", "measures")
-ANALYSIS_IN = FRAMES_IN
 
-AGG_ANALYSIS_CN = (*ANALYSIS_CN, "aggs")
-AGG_ANALYSIS_IN = FRAMES_IN
+class AnalysisCN(Enum):
+    """Enum for the columns in the analysis dataframe."""
+
+    INDIVIDUALS = "individuals"
+    MEASURES = "measures"
+
+
+ANALYSIS_IN = FramesIN
+
+
+class AggAnalysisCN(Enum):
+    """Enum for the columns in the aggregated analysis dataframe."""
+
+    INDIVIDUALS = "individuals"
+    MEASURES = "measures"
+    AGGS = "aggs"
+
+
+AGG_ANALYSIS_IN = FramesIN
 
 ####################################################################################################
 # DIAGNOSTICS CONSTANTS
