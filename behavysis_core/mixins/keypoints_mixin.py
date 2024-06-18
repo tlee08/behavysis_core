@@ -7,7 +7,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from behavysis_core.constants import KEYPOINTS_CN, KEYPOINTS_IN, IndivColumns
+from behavysis_core.constants import IndivColumns, KeypointsCN, KeypointsIN
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
 
@@ -87,10 +87,14 @@ class KeypointsMixin:
             Keypoints pd.DataFrame.
         """
         df = df.copy()
-        # Removing the scorer column because all values are identical
-        # Keeping only the "individuals", "bodyparts", and "coords" levels (i.e. dropping "scorer")
+        # Keeping only the "individuals", "bodyparts", and "coords" levels
+        # (i.e. dropping "scorer" level)
         columns = df.columns.to_frame(index=False)
-        columns = columns[KEYPOINTS_CN[1:]]
+        columns = columns[
+            KeypointsCN.INDIVIDUALS.value,
+            KeypointsCN.BODYPARTS.value,
+            KeypointsCN.COORDS.value,
+        ]
         df.columns = pd.MultiIndex.from_frame(columns)
         # Grouping the columns by the individuals level for cleaner presentation
         df = df.sort_index(axis=1)
@@ -114,8 +118,10 @@ class KeypointsMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=KEYPOINTS_IN),
-            columns=pd.MultiIndex.from_tuples((), names=KEYPOINTS_CN),
+            index=pd.Index(frame_vect, name=DFIOMixin.enum_to_list(KeypointsIN)[0]),
+            columns=pd.MultiIndex.from_tuples(
+                (), names=DFIOMixin.enum_to_list(KeypointsCN)
+            ),
         )
 
     @staticmethod
@@ -132,9 +138,9 @@ class KeypointsMixin:
         # Checking for null values
         assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
-        DFIOMixin.check_df_index_names(df, KEYPOINTS_IN)
+        DFIOMixin.check_df_index_names(df, KeypointsIN)
         # Checking that the column levels are correct
-        DFIOMixin.check_df_column_names(df, KEYPOINTS_CN)
+        DFIOMixin.check_df_column_names(df, KeypointsCN)
 
     @staticmethod
     def read_feather(fp: str) -> pd.DataFrame:

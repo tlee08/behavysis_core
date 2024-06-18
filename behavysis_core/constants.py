@@ -97,7 +97,7 @@ class BehavCN(Enum):
     OUTCOMES = "outcomes"
 
 
-BEHAV_IN = FramesIN
+BehavIN = FramesIN
 
 
 class BehavColumns(Enum):
@@ -120,7 +120,7 @@ class AnalysisCN(Enum):
     MEASURES = "measures"
 
 
-ANALYSIS_IN = FramesIN
+AnalysisIN = FramesIN
 
 
 class AggAnalysisCN(Enum):
@@ -131,7 +131,7 @@ class AggAnalysisCN(Enum):
     AGGS = "aggs"
 
 
-AGG_ANALYSIS_IN = FramesIN
+AggAnalysisIN = FramesIN
 
 ####################################################################################################
 # DIAGNOSTICS CONSTANTS

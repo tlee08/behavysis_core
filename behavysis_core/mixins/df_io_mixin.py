@@ -6,14 +6,13 @@ from __future__ import annotations
 
 import functools
 import os
-from typing import Callable
-
 from enum import Enum
+from typing import Callable
 
 import numpy as np
 import pandas as pd
 
-from behavysis_core.constants import DLC_HDF_KEY, KEYPOINTS_CN
+from behavysis_core.constants import DLC_HDF_KEY, KeypointsCN
 
 
 class DFIOMixin:
@@ -62,8 +61,9 @@ class DFIOMixin:
         """
         Reading DLC csv file.
         """
+        col_levels = DFIOMixin.enum_to_list(KeypointsCN)
         return pd.read_csv(
-            fp, header=np.arange(len(KEYPOINTS_CN)).tolist(), index_col=0
+            fp, header=np.arange(len(col_levels)).tolist(), index_col=0
         ).sort_index()
 
     @staticmethod
@@ -130,7 +130,7 @@ class DFIOMixin:
         # Converting `levels` to a tuple
         if isinstance(levels, Enum):
             # If Enum
-            levels = tuple(i.value for i in levels)
+            levels = DFIOMixin.enum_to_list(levels)
         elif isinstance(levels, str):
             # If str
             levels = (levels,)
@@ -146,10 +146,18 @@ class DFIOMixin:
         # Converting `levels` to a tuple
         if isinstance(levels, Enum):
             # If Enum
-            levels = tuple(i.value for i in levels)
+            levels = DFIOMixin.enum_to_list(levels)
         elif isinstance(levels, str):
             # If str
             levels = (levels,)
         assert (
             df.columns.names == levels
         ), f"The column level is incorrect. Expected {levels} but got {df.columns.name}."
+
+    @staticmethod
+    def enum_to_list(my_enum: Enum) -> list[str]:
+        """
+        Useful helper function to convert an Enum to a list of its values.
+        Used in `check_df` and `init_df` functions.
+        """
+        return [i.value for i in my_enum]

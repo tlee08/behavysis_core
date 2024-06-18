@@ -7,7 +7,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from behavysis_core.constants import FEATURES_CN, FEATURES_IN, IndivColumns
+from behavysis_core.constants import FeaturesCN, FeaturesIN, IndivColumns
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
 
@@ -88,8 +88,10 @@ class FeaturesMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=FEATURES_IN),
-            columns=pd.MultiIndex.from_tuples((), names=FEATURES_CN),
+            index=pd.Index(frame_vect, name=DFIOMixin.enum_to_list(FeaturesIN)[0]),
+            columns=pd.MultiIndex.from_tuples(
+                (), names=DFIOMixin.enum_to_list(FeaturesCN)
+            ),
         )
 
     @staticmethod
@@ -104,13 +106,11 @@ class FeaturesMixin:
         - The index levels are correct.
         """
         # Checking for null values
-        assert (
-            not df.isnull().values.any()
-        ), "The dataframe contains null values. Be sure to run interpolate_points first."
+        assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
-        DFIOMixin.check_df_index_names(df, FEATURES_IN)
+        DFIOMixin.check_df_index_names(df, FeaturesIN)
         # Checking that the column levels are correct
-        DFIOMixin.check_df_column_names(df, FEATURES_CN)
+        DFIOMixin.check_df_column_names(df, FeaturesCN)
 
     @staticmethod
     def read_feather(fp: str) -> pd.DataFrame:
