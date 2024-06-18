@@ -8,6 +8,8 @@ import functools
 import os
 from typing import Callable
 
+from enum import Enum
+
 import numpy as np
 import pandas as pd
 
@@ -123,17 +125,31 @@ class DFIOMixin:
         assert isinstance(df, pd.DataFrame), "The dataframe is not a pandas DataFrame."
 
     @staticmethod
-    def check_df_index_names(df: pd.DataFrame, levels: tuple[str] | str) -> None:
+    def check_df_index_names(df: pd.DataFrame, levels: Enum | tuple[str] | str) -> None:
         """__summary__"""
-        levels = (levels,) if isinstance(levels, str) else levels
+        # Converting `levels` to a tuple
+        if isinstance(levels, Enum):
+            # If Enum
+            levels = tuple(i.value for i in levels)
+        elif isinstance(levels, str):
+            # If str
+            levels = (levels,)
         assert (
             df.index.names == levels
         ), f"The index level is incorrect. Expected {levels} but got {df.index.name}."
 
     @staticmethod
-    def check_df_column_names(df: pd.DataFrame, levels: tuple[str] | str) -> None:
+    def check_df_column_names(
+        df: pd.DataFrame, levels: Enum | tuple[str] | str
+    ) -> None:
         """__summary__"""
-        levels = (levels,) if isinstance(levels, str) else levels
+        # Converting `levels` to a tuple
+        if isinstance(levels, Enum):
+            # If Enum
+            levels = tuple(i.value for i in levels)
+        elif isinstance(levels, str):
+            # If str
+            levels = (levels,)
         assert (
             df.columns.names == levels
         ), f"The column level is incorrect. Expected {levels} but got {df.columns.name}."
