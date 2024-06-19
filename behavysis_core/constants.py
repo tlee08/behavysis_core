@@ -60,6 +60,14 @@ class KeypointsCN(Enum):
     COORDS = "coords"
 
 
+class Coords(Enum):
+    """Enum for the coordinates in the keypoints dataframe."""
+
+    X = "x"
+    Y = "y"
+    LIKELIHOOD = "likelihood"
+
+
 KeypointsIN = FramesIN
 
 DLC_HDF_KEY = "data"

@@ -91,9 +91,11 @@ class KeypointsMixin:
         # (i.e. dropping "scorer" level)
         columns = df.columns.to_frame(index=False)
         columns = columns[
-            KeypointsCN.INDIVIDUALS.value,
-            KeypointsCN.BODYPARTS.value,
-            KeypointsCN.COORDS.value,
+            [
+                KeypointsCN.INDIVIDUALS.value,
+                KeypointsCN.BODYPARTS.value,
+                KeypointsCN.COORDS.value,
+            ]
         ]
         df.columns = pd.MultiIndex.from_frame(columns)
         # Grouping the columns by the individuals level for cleaner presentation

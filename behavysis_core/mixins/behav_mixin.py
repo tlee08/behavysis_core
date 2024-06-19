@@ -10,7 +10,6 @@ from scipy.stats import mode
 
 from behavysis_core.constants import BehavCN, BehavColumns, BehavIN
 from behavysis_core.data_models.bouts import Bouts
-from behavysis_core.data_models.experiment_configs import ExperimentConfigs
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
 
@@ -216,17 +215,18 @@ class BehavMixin:
         return df
 
     @staticmethod
-    def import_boris_tsv(boris_fp: str, configs_fp: str, behavs_ls) -> pd.DataFrame:
+    def import_boris_tsv(
+        fp: str, start_frame: int, stop_frame: int, behavs_ls
+    ) -> pd.DataFrame:
         """
         Importing Boris TSV file.
         """
         # Making df structure
-        configs = ExperimentConfigs.read_json(configs_fp)
-        start = configs.get_ref(configs.auto.start_frame)
-        stop = configs.get_ref(configs.auto.stop_frame) + 1
-        df = BehavMixin.init_df(np.arange(start, stop))
+        # start = configs.get_ref(configs.auto.start_frame)
+        # stop = configs.get_ref(configs.auto.stop_frame) + 1
+        df = BehavMixin.init_df(np.arange(start_frame, stop_frame))
         # Reading in corresponding BORIS tsv file
-        df_boris = pd.read_csv(boris_fp, sep="\t")
+        df_boris = pd.read_csv(fp, sep="\t")
         # Initialising new classification column based on BORIS filename and behaviour name
         for behav in behavs_ls:
             df[(behav, BehavColumns.ACTUAL.value)] = 0

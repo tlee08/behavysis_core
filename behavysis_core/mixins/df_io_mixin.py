@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import functools
 import os
-from enum import Enum
+from enum import EnumType
 from typing import Callable
 
 import numpy as np
@@ -23,51 +23,44 @@ class DFIOMixin:
     ###############################################################################################
 
     @staticmethod
-    def read_decorator(
+    def __read_decorator(
         func: Callable[[str], pd.DataFrame],
     ) -> Callable[[str], pd.DataFrame]:
-        """A decorator to catch errors when reading in files."""
+        """A decorator to catch errors when reading in a file."""
 
         @functools.wraps(func)
-        def wrapper(fp: str, *args, **kwargs):
-            # try:
-            return func(fp, *args, **kwargs)
-            # except Exception as e:
-            #     raise ValueError(
-            #         f'The file, "{fp}", does not exist or is in an invalid format.'
-            #         + "Please check this file."
-            #     ) from e
+        def wrapper(fp: str):
+            # Reading the file and sorting by index
+            return func(fp).sort_index()
 
         return wrapper
 
     @staticmethod
-    def write_decorator(
+    def __write_decorator(
         func: Callable[[pd.DataFrame, str], None],
     ) -> Callable[[pd.DataFrame, str], None]:
-        """A decorator to catch errors when reading in files."""
+        """A decorator to catch errors when writing to a file."""
 
         @functools.wraps(func)
-        def wrapper(df, fp: str, *args, **kwargs):
+        def wrapper(df, fp: str):
             # Making the directory if it doesn't exist
             os.makedirs(os.path.split(fp)[0], exist_ok=True)
             # Writing the file
-            return func(df, fp, *args, **kwargs)
+            return func(df, fp)
 
         return wrapper
 
     @staticmethod
-    @read_decorator
+    @__read_decorator
     def read_dlc_csv(fp: str) -> pd.DataFrame:
         """
         Reading DLC csv file.
         """
         col_levels = DFIOMixin.enum_to_list(KeypointsCN)
-        return pd.read_csv(
-            fp, header=np.arange(len(col_levels)).tolist(), index_col=0
-        ).sort_index()
+        return pd.read_csv(fp, header=np.arange(len(col_levels)).tolist(), index_col=0)
 
     @staticmethod
-    @write_decorator
+    @__write_decorator
     def write_dlc_csv(df: pd.DataFrame, fp: str) -> None:
         """
         Writing DLC dataframe to csv file.
@@ -75,15 +68,15 @@ class DFIOMixin:
         df.to_csv(fp)
 
     @staticmethod
-    @read_decorator
+    @__read_decorator
     def read_h5(fp: str) -> pd.DataFrame:
         """
         Reading h5 file.
         """
-        return pd.DataFrame(pd.read_hdf(fp, key=DLC_HDF_KEY, mode="r").sort_index())
+        return pd.DataFrame(pd.read_hdf(fp, key=DLC_HDF_KEY, mode="r"))
 
     @staticmethod
-    @write_decorator
+    @__write_decorator
     def write_h5(df: pd.DataFrame, fp: str) -> None:
         """
         Writing dataframe h5 file.
@@ -91,15 +84,15 @@ class DFIOMixin:
         df.to_hdf(fp, key=DLC_HDF_KEY, mode="w")
 
     @staticmethod
-    @read_decorator
+    @__read_decorator
     def read_feather(fp: str) -> pd.DataFrame:
         """
         Reading feather file.
         """
-        return pd.read_feather(fp).sort_index()
+        return pd.read_feather(fp)
 
     @staticmethod
-    @write_decorator
+    @__write_decorator
     def write_feather(df: pd.Series | pd.DataFrame, fp: str) -> None:
         """
         Writing dataframe feather file.
@@ -107,7 +100,7 @@ class DFIOMixin:
         df.to_feather(fp)
 
     ###############################################################################################
-    # DF Init functions
+    # DF init functions
     ###############################################################################################
 
     @staticmethod
@@ -116,7 +109,7 @@ class DFIOMixin:
         return pd.DataFrame(index=frame_vect)
 
     ###############################################################################################
-    # Check functions
+    # DF Check functions
     ###############################################################################################
 
     @staticmethod
@@ -125,14 +118,14 @@ class DFIOMixin:
         assert isinstance(df, pd.DataFrame), "The dataframe is not a pandas DataFrame."
 
     @staticmethod
-    def check_df_index_names(df: pd.DataFrame, levels: Enum | tuple[str] | str) -> None:
+    def check_df_index_names(
+        df: pd.DataFrame, levels: EnumType | tuple[str] | str
+    ) -> None:
         """__summary__"""
         # Converting `levels` to a tuple
-        if isinstance(levels, Enum):
-            # If Enum
+        if isinstance(levels, EnumType):  # If Enum
             levels = DFIOMixin.enum_to_list(levels)
-        elif isinstance(levels, str):
-            # If str
+        elif isinstance(levels, str):  # If str
             levels = (levels,)
         assert (
             df.index.names == levels
@@ -140,22 +133,20 @@ class DFIOMixin:
 
     @staticmethod
     def check_df_column_names(
-        df: pd.DataFrame, levels: Enum | tuple[str] | str
+        df: pd.DataFrame, levels: EnumType | tuple[str] | str
     ) -> None:
         """__summary__"""
         # Converting `levels` to a tuple
-        if isinstance(levels, Enum):
-            # If Enum
+        if isinstance(levels, EnumType):  # If Enum
             levels = DFIOMixin.enum_to_list(levels)
-        elif isinstance(levels, str):
-            # If str
+        elif isinstance(levels, str):  # If str
             levels = (levels,)
         assert (
             df.columns.names == levels
         ), f"The column level is incorrect. Expected {levels} but got {df.columns.name}."
 
     @staticmethod
-    def enum_to_list(my_enum: Enum) -> list[str]:
+    def enum_to_list(my_enum: EnumType) -> list[str]:
         """
         Useful helper function to convert an Enum to a list of its values.
         Used in `check_df` and `init_df` functions.
