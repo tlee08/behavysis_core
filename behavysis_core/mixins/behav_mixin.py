@@ -99,7 +99,8 @@ class BehavMixin:
             # Adding pred column
             out_df[(behav, p)] = df[(behav, p)].values
             # Adding actual column
-            out_df[(behav, a)] = 0
+            # TODO: quick flip but make more explicit
+            out_df[(behav, a)] = df[(behav, p)].values * -1
             # Adding user_behav columns
             for i in user_behavs:
                 out_df[(behav, i)] = 0
