@@ -17,13 +17,13 @@ class ProcessVidMixin:
 
     @staticmethod
     def process_vid(
-        in_fp: Optional[str],
-        out_fp: Optional[str],
-        height_px: Optional[int],
-        width_px: Optional[int],
-        fps: Optional[int],
-        start_sec: Optional[float],
-        stop_sec: Optional[float],
+        in_fp: str,
+        out_fp: str,
+        height_px: Optional[int] = None,
+        width_px: Optional[int] = None,
+        fps: Optional[int] = None,
+        start_sec: Optional[float] = None,
+        stop_sec: Optional[float] = None,
     ) -> str:
         """__summary__"""
         outcome = ""
