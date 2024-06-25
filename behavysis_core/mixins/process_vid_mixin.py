@@ -28,7 +28,16 @@ class ProcessVidMixin:
         """__summary__"""
         outcome = ""
         # Constructing ffmpeg command
-        cmd = ["ffmpeg", "-i", in_fp]
+        cmd = ["ffmpeg"]
+
+        # TRIMMING (SEEKING TO START BEFORE OPENING VIDEO - MUCH FASTER)
+        if start_sec:
+            # Setting start trim filter in cmd
+            cmd += ["-ss", str(start_sec)]
+            outcome += f"Trimming video from {start_sec} seconds.\n"
+
+        # Opening video
+        cmd += ["-i", in_fp]
 
         # RESIZING and TRIMMING
         filters = []
@@ -40,9 +49,9 @@ class ProcessVidMixin:
             filters.append(f"scale={width_px}:{height_px}")
             # Adding to outcome
             outcome += f"Downsampling to {width_px} x {height_px}.\n"
-        if start_sec or stop_sec:
-            # Preparing start-stop filter in cmd
-            filters.append("setpts=PTS-STARTPTS")
+        # if start_sec or stop_sec:
+        #     # Preparing start-stop filter in cmd
+        #     filters.append("setpts=PTS-STARTPTS")
         if filters:
             cmd += ["-vf", ",".join(filters)]
 
@@ -51,10 +60,6 @@ class ProcessVidMixin:
             cmd += ["-r", str(fps)]
             outcome += f"Changing fps to {fps}.\n"
         # TRIMMING
-        if start_sec:
-            # Setting start trim filter in cmd
-            cmd += ["-ss", str(start_sec)]
-            outcome += f"Trimming video from {start_sec} seconds.\n"
         if stop_sec:
             # Setting stop trim filter in cmd
             duration = stop_sec - (start_sec if start_sec else 0)
