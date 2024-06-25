@@ -58,7 +58,7 @@ class IOMixin:
 
     @staticmethod
     def overwrite_check(
-        out_fp_var: str = "out_fp", overwrite_var: str = "overwrite"
+        dst_fp_var: str = "out_fp", overwrite_var: str = "overwrite"
     ) -> Callable[[Any], str]:
         """
         Decorator to check if we should skip processing (i.e. not overwrite the file).
@@ -72,7 +72,7 @@ class IOMixin:
             def wrapper(*args, **kwargs) -> str:
                 """__summary__"""
                 # Getting the out_fp and overwrite variables
-                out_fp = kwargs.get(out_fp_var, False)
+                out_fp = kwargs.get(dst_fp_var, False)
                 overwrite = kwargs.get(overwrite_var, False)
                 # If overwrite is False, checking if we should skip processing
                 if not overwrite and os.path.exists(out_fp):
