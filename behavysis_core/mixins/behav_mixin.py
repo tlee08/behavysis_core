@@ -216,7 +216,7 @@ class BehavMixin:
         return df
 
     @staticmethod
-    def import_boris_tsv(fp: str, start_frame: int, stop_frame: int) -> pd.DataFrame:
+    def import_boris_tsv(fp: str, behavs_ls: list[str], start_frame: int, stop_frame: int) -> pd.DataFrame:
         """
         Importing Boris TSV file.
         """
@@ -225,7 +225,10 @@ class BehavMixin:
         # Reading in corresponding BORIS tsv file
         df_boris = pd.read_csv(fp, sep="\t")
         # Initialising new classification column based on BORIS filename and behaviour name
+        # TODO: how to reconcile this with the behavs_ls?
         for behav in df_boris["Behavior"].unique():
+            df[(behav, BehavColumns.ACTUAL.value)] = 0
+        for behav in behavs_ls:
             df[(behav, BehavColumns.ACTUAL.value)] = 0
         # Setting the classification values from the BORIS file
         for ind, row in df_boris.iterrows():
