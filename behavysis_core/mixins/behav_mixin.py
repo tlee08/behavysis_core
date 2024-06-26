@@ -228,16 +228,19 @@ class BehavMixin:
         # TODO: how to reconcile this with the behavs_ls?
         for behav in df_boris["Behavior"].unique():
             df[(behav, BehavColumns.ACTUAL.value)] = 0
+            df[(behav, BehavColumns.PRED.value)] = 0
         for behav in behavs_ls:
             df[(behav, BehavColumns.ACTUAL.value)] = 0
+            df[(behav, BehavColumns.PRED.value)] = 0
         # Setting the classification values from the BORIS file
         for ind, row in df_boris.iterrows():
             # Getting corresponding frame of this event point
-            behav = (row["Behavior"], BehavColumns.ACTUAL.value)
+            behav = row["Behavior"]
             frame = row["Image index"]
             status = row["Behavior type"]
             # Updating the classification in the scored df
-            df.loc[frame:, behav] = status == "START"
+            df.loc[frame:, (behav, BehavColumns.ACTUAL.value)] = status == "START"
+            df.loc[frame:, (behav, BehavColumns.PRED.value)] = status == "START"
         # Setting dtype to int8
         df = df.astype(np.int8)
         return df
