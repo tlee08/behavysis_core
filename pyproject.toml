@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "behavysis_core"
-version = "0.1.1"
-description = "Core functionality supporting the `ba` suite"
+version = "0.1.3"
+description = "Core functionality supporting the behavysis suite"
 authors = ["BowenLab"]
 license = "LGPL-3.0-or-later"
 readme = "README.md"
