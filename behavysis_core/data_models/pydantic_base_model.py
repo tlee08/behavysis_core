@@ -34,7 +34,9 @@ class PydanticBaseModel(BaseModel):
 
     def write_json(self, fp: str) -> None:
         """
-        Writes the given configs model to the configs file (i.e. hence updating the file)
+        Writes the given configs model to the configs file (i.e. hence updating the file).
+        
+        Makes the directory if it doesn't exist.
 
         Parameters
         ----------
