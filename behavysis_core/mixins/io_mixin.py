@@ -72,8 +72,8 @@ class IOMixin:
             def wrapper(*args, **kwargs) -> str:
                 """__summary__"""
                 # Getting the out_fp and overwrite variables
-                out_fp = kwargs.get(dst_fp_var, False)
-                overwrite = kwargs.get(overwrite_var, False)
+                out_fp = kwargs[dst_fp_var]
+                overwrite = kwargs[overwrite_var]
                 # If overwrite is False, checking if we should skip processing
                 if not overwrite and os.path.exists(out_fp):
                     return DiagnosticsMixin.warning_msg(func)
@@ -86,7 +86,10 @@ class IOMixin:
 
     @staticmethod
     def render_template(
-        tmpl_name: str, pkg_name: str, pkg_subdir: str, **kwargs: Any,
+        tmpl_name: str,
+        pkg_name: str,
+        pkg_subdir: str,
+        **kwargs: Any,
     ) -> str:
         """
         Renders the given template with the given arguments.
@@ -97,10 +100,14 @@ class IOMixin:
         template = env.get_template(tmpl_name)
         # Rendering the template
         return template.render(**kwargs)
-    
+
     @staticmethod
     def save_template(
-        tmpl_name: str, pkg_name: str, pkg_subdir: str, dst_fp: str, **kwargs: Any,
+        tmpl_name: str,
+        pkg_name: str,
+        pkg_subdir: str,
+        dst_fp: str,
+        **kwargs: Any,
     ) -> None:
         """
         Renders the given template with the given arguments and saves it to the out_fp.
