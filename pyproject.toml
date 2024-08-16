@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "behavysis_core"
-version = "0.1.5"
+version = "0.1.1"
 description = "Core functionality supporting the behavysis suite"
 authors = ["BowenLab"]
 license = "LGPL-3.0-or-later"
@@ -10,7 +10,7 @@ repository = "https://github.com/tlee08/behavysis_core"
 packages = [{ include = "behavysis_core" }]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.12"
 pydantic = "^2.7.0"
 numpy = "^1.26.4"
 pandas = "^2.2.2"
