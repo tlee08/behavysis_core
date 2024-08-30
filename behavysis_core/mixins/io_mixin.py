@@ -59,7 +59,7 @@ class IOMixin:
     @staticmethod
     def overwrite_check(
         dst_fp_var: str = "out_fp", overwrite_var: str = "overwrite"
-    ) -> Callable[[Any], str]:
+    ) -> Callable[..., str]:
         """
         Decorator to check if we should skip processing (i.e. not overwrite the file).
         Returns the function early if we should skip.

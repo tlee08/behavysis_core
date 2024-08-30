@@ -3,7 +3,7 @@ _summary_
 """
 
 import os
-from typing import Optional
+from typing import Any
 
 import matplotlib.pyplot as plt
 from pydantic import BaseModel, ConfigDict, field_validator
@@ -19,11 +19,11 @@ class ConfigsFormatVid(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    width_px: Optional[int | str] = None
-    height_px: Optional[int | str] = None
-    fps: Optional[float | str] = None
-    start_sec: Optional[float | str] = None
-    stop_sec: Optional[float | str] = None
+    width_px: None | int | str = None
+    height_px: None | int | str = None
+    fps: None | float | str = None
+    start_sec: None | float | str = None
+    stop_sec: None | float | str = None
 
 
 class ConfigsRunDLC(BaseModel):
@@ -158,10 +158,10 @@ class ConfigsAuto(PydanticBaseModel):
     raw_vid: VidMetadata = VidMetadata()
     formatted_vid: VidMetadata = VidMetadata()
 
-    px_per_mm: Optional[float] = None
-    start_frame: Optional[int] = None
-    stop_frame: Optional[int] = None
-    exp_dur_frames: Optional[int] = None
+    px_per_mm: None | float = None
+    start_frame: None | int = None
+    stop_frame: None | int = None
+    exp_dur_frames: None | int = None
 
 
 class ConfigsRef(PydanticBaseModel):
@@ -179,7 +179,7 @@ class ExperimentConfigs(PydanticBaseModel):
     auto: ConfigsAuto = ConfigsAuto()
     ref: ConfigsRef = ConfigsRef()
 
-    def get_ref(self, val: str):
+    def get_ref(self, val: Any) -> Any:
         """
         If the val is in the reference format, then
         return reference value of the val if it exists in the reference store.

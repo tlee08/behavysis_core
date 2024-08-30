@@ -4,8 +4,6 @@ Utility functions.
 
 from __future__ import annotations
 
-from typing import Optional
-
 import cv2
 
 from behavysis_core.data_models.vid_metadata import VidMetadata
@@ -19,11 +17,11 @@ class ProcessVidMixin:
     def process_vid(
         in_fp: str,
         out_fp: str,
-        height_px: Optional[int] = None,
-        width_px: Optional[int] = None,
-        fps: Optional[int] = None,
-        start_sec: Optional[float] = None,
-        stop_sec: Optional[float] = None,
+        height_px: None | int = None,
+        width_px: None | int = None,
+        fps: None | int = None,
+        start_sec: None | float = None,
+        stop_sec: None | float = None,
     ) -> str:
         """__summary__"""
         outcome = ""

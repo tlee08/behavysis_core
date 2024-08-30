@@ -5,7 +5,7 @@ Utility functions.
 from __future__ import annotations
 
 import os
-from typing import Callable, Optional
+from typing import Callable
 
 import numpy as np
 import pandas as pd
@@ -24,7 +24,7 @@ class DiagnosticsMixin:
         return np.random.choice(DIAGNOSTICS_SUCCESS_MESSAGES)
 
     @staticmethod
-    def warning_msg(func: Optional[Callable] = None):
+    def warning_msg(func: None | Callable = None):
         """
         Return a warning message for the given function.
         """
@@ -37,13 +37,6 @@ class DiagnosticsMixin:
             "WARNING: Output file already exists - not overwriting file.\n"
             + f"To overwrite, specify `{func_name}(..., overwrite=True)`.\n"
         )
-
-    @staticmethod
-    def read_diagnostics(fp):
-        """
-        __summary__
-        """
-        return pd.read_csv()
 
     @staticmethod
     def load_diagnostics(fp: str) -> pd.DataFrame:

@@ -8,7 +8,6 @@ import logging
 import re
 import subprocess
 from multiprocessing import current_process
-from typing import Optional
 
 
 class MultiprocMixin:
@@ -36,7 +35,7 @@ class MultiprocMixin:
             return []
 
     @staticmethod
-    def get_best_gpu(gputouse: Optional[int] = None) -> int:
+    def get_best_gpu(gputouse: None | int = None) -> str:
         """
         Picks the best GPU ID from the available GPUs.
         Criteria:
@@ -44,6 +43,8 @@ class MultiprocMixin:
             - If the given `gputouse` is not in the list, then raises an error
         - If `gputouse` is NOT given, then return the first GPU ID
             - If there are no GPUs available, then return None
+
+        Returns the best GPU ID in the form of PyTorch device string.
         """
         # Get list of GPU IDs
         gpu_ids = MultiprocMixin.get_gpu_ids()
