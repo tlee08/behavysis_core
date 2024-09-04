@@ -52,8 +52,6 @@ class FramesIN(Enum):
 class KeypointsCN(Enum):
     """Enum for the columns in the keypoints dataframe."""
 
-    ("scorer", "individuals", "bodyparts", "coords")
-
     SCORER = "scorer"
     INDIVIDUALS = "individuals"
     BODYPARTS = "bodyparts"
