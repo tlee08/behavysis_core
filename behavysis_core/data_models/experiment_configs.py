@@ -162,6 +162,7 @@ class ConfigsAuto(PydanticBaseModel):
     start_frame: None | int = None
     stop_frame: None | int = None
     exp_dur_frames: None | int = None
+    scorer_name: None | str = None
 
 
 class ConfigsRef(PydanticBaseModel):

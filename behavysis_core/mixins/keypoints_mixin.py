@@ -45,8 +45,8 @@ class KeypointsMixin:
     @staticmethod
     def get_headings(df: pd.DataFrame) -> tuple[list[str], list[str]]:
         """
-        Returns a tuple of the individuals (animals, not "single"), and tuple of the multi-animal
-        bodyparts.
+        Returns a tuple of the individuals (only animals, not "single"), and tuple of
+        the multi-animal bodyparts.
 
         Parameters
         ----------
@@ -63,7 +63,7 @@ class KeypointsMixin:
         # Filtering out any single and processing columns
         for i in [IndivColumns.PROCESS.value, IndivColumns.SINGLE.value]:
             if i in columns.unique("individuals"):
-                columns = columns.drop(i, level="individuals")
+                columns = columns.drop(i, level="individuals")  # type: ignore (is multiindex)
         # Getting individuals list
         indivs = columns.unique("individuals").to_list()
         # Getting bodyparts list
@@ -73,7 +73,7 @@ class KeypointsMixin:
     @staticmethod
     def clean_headings(df: pd.DataFrame) -> pd.DataFrame:
         """
-        Drops the "scorer" level (and any other unnecessary levels) in the column
+        Drops the "scorer" level in the column
         header of the dataframe. This makes subsequent processing easier.
 
         Parameters
