@@ -8,7 +8,7 @@ import functools
 import os
 import re
 import shutil
-from typing import Any, Callable
+from typing import Any
 
 from jinja2 import Environment, PackageLoader
 
@@ -57,19 +57,17 @@ class IOMixin:
         return os.path.splitext(os.path.basename(fp))[0]
 
     @staticmethod
-    def overwrite_check(
-        dst_fp_var: str = "out_fp", overwrite_var: str = "overwrite"
-    ) -> Callable[..., str]:
+    def overwrite_check(dst_fp_var: str = "out_fp", overwrite_var: str = "overwrite"):
         """
         Decorator to check if we should skip processing (i.e. not overwrite the file).
         Returns the function early if we should skip.
         """
 
-        def decorator(func: Callable[[Any], str]) -> Callable[[Any], str]:
+        def decorator(func):
             """__summary__"""
 
             @functools.wraps(func)
-            def wrapper(*args, **kwargs) -> str:
+            def wrapper(*args, **kwargs):
                 """__summary__"""
                 # Getting the out_fp and overwrite variables
                 out_fp = kwargs[dst_fp_var]
