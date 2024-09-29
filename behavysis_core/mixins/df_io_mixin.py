@@ -146,9 +146,9 @@ class DFIOMixin:
         ), f"The column level is incorrect. Expected {levels} but got {df.columns.name}."
 
     @staticmethod
-    def enum_to_list(my_enum: EnumType) -> list[str]:
+    def enum_to_list(my_enum: EnumType) -> tuple[str]:
         """
         Useful helper function to convert an Enum to a list of its values.
         Used in `check_df` and `init_df` functions.
         """
-        return [i.value for i in my_enum]
+        return tuple(i.value for i in my_enum)

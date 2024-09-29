@@ -100,7 +100,7 @@ class BehavMixin:
             out_df[(behav, p)] = df[(behav, p)].values
             # Adding actual column
             # TODO: quick flip but make more explicit
-            out_df[(behav, a)] = df[(behav, p)].values * -1
+            out_df[(behav, a)] = df[(behav, p)].values * np.array(-1)
             # Adding user_behav columns
             for i in user_behavs:
                 out_df[(behav, i)] = 0
@@ -146,7 +146,7 @@ class BehavMixin:
         return ret_df
 
     @staticmethod
-    def init_df(frame_vect: pd.Series | pd.Index) -> pd.DataFrame:
+    def init_df(frame_vect: pd.Series | pd.Index | np.ndarray) -> pd.DataFrame:
         """
         Returning a frame-by-frame analysis_df with the frame number (according to original video)
         as the MultiIndex index, relative to the first element of frame_vect.
