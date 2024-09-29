@@ -12,7 +12,11 @@ from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
 
 class KeypointsMixin:
-    """__summary__"""
+    """
+    Mixin for behaviour DF
+    (generated from maDLC keypoint detection)
+    functions.
+    """
 
     @staticmethod
     def check_bpts_exist(df: pd.DataFrame, bodyparts: list) -> None:
@@ -120,9 +124,9 @@ class KeypointsMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=DFIOMixin.enum_to_list(KeypointsIN)[0]),
+            index=pd.Index(frame_vect, name=DFIOMixin.enum2tuple(KeypointsIN)[0]),
             columns=pd.MultiIndex.from_tuples(
-                (), names=DFIOMixin.enum_to_list(KeypointsCN)
+                (), names=DFIOMixin.enum2tuple(KeypointsCN)
             ),
         )
 

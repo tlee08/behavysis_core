@@ -56,7 +56,7 @@ class DFIOMixin:
         """
         Reading DLC csv file.
         """
-        col_levels = DFIOMixin.enum_to_list(KeypointsCN)
+        col_levels = DFIOMixin.enum2tuple(KeypointsCN)
         return pd.read_csv(fp, header=np.arange(len(col_levels)).tolist(), index_col=0)
 
     @staticmethod
@@ -124,7 +124,7 @@ class DFIOMixin:
         """__summary__"""
         # Converting `levels` to a tuple
         if isinstance(levels, EnumType):  # If Enum
-            levels = DFIOMixin.enum_to_list(levels)
+            levels = DFIOMixin.enum2tuple(levels)
         elif isinstance(levels, str):  # If str
             levels = (levels,)
         assert (
@@ -138,7 +138,7 @@ class DFIOMixin:
         """__summary__"""
         # Converting `levels` to a tuple
         if isinstance(levels, EnumType):  # If Enum
-            levels = DFIOMixin.enum_to_list(levels)
+            levels = DFIOMixin.enum2tuple(levels)
         elif isinstance(levels, str):  # If str
             levels = (levels,)
         assert (
@@ -146,7 +146,7 @@ class DFIOMixin:
         ), f"The column level is incorrect. Expected {levels} but got {df.columns.name}."
 
     @staticmethod
-    def enum_to_list(my_enum: EnumType) -> tuple[str]:
+    def enum2tuple(my_enum):
         """
         Useful helper function to convert an Enum to a list of its values.
         Used in `check_df` and `init_df` functions.

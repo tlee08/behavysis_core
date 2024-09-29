@@ -122,7 +122,7 @@ class ConfigsEvalVid(BaseModel):
     @classmethod
     def validate_colour_level(cls, v):
         """_summary_"""
-        vals = DFIOMixin.enum_to_list(KeypointsCN)
+        vals = DFIOMixin.enum2tuple(KeypointsCN)
         return PydanticBaseModel.validate_attr_closed_set(v, vals)
 
 

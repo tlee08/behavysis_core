@@ -12,9 +12,15 @@ from behavysis_core.constants import BehavCN, BehavColumns, BehavIN
 from behavysis_core.data_models.bouts import Bouts
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
+# TODO
 
-class BehavMixin:
-    """_summary_"""
+
+class BoutsDfMixin:
+    """
+    Mixin for behaviour DF
+    (generated from behavysis behaviour classification)
+    functions.
+    """
 
     @staticmethod
     def vect_2_bouts(vect: np.ndarray | pd.Series) -> pd.DataFrame:
@@ -55,7 +61,7 @@ class BehavMixin:
         # For each behaviour
         for behav in frames_df.columns.unique(BehavCN.BEHAVIOURS.value):
             # Getting start-stop of each bout
-            start_stop_df = BehavMixin.vect_2_bouts(frames_df[(behav, "pred")])
+            start_stop_df = BoutsDfMixin.vect_2_bouts(frames_df[(behav, "pred")])
             # For each bout (i.e. start-stop pair)
             for _, row in start_stop_df.iterrows():
                 # Getting only the frames in the current bout
@@ -72,7 +78,7 @@ class BehavMixin:
                 }
                 # Getting the mode value for the bout (actual, and specific user_behavs)
                 for outcome, values in bout_frames_df[behav].items():
-                    if outcome not in DFIOMixin.enum_to_list(BehavColumns):
+                    if outcome not in DFIOMixin.enum2tuple(BehavColumns):
                         bout_dict["user_defined"][str(outcome)] = int(mode(values).mode)
                 # Making the Bout model object and appending to bouts_ls
                 bouts_ls.append(bout_dict)
@@ -92,7 +98,7 @@ class BehavMixin:
         as the key and a tuple of specific behaviour strs as the value.
         """
         # Keeping the `actual`, `pred`, and all user_behavs columns
-        out_df = BehavMixin.init_df(df.index)
+        out_df = BoutsDfMixin.init_df(df.index)
         a = BehavColumns.ACTUAL.value
         p = BehavColumns.PRED.value
         for behav, user_behavs in behav_outcomes.items():
@@ -100,7 +106,7 @@ class BehavMixin:
             out_df[(behav, p)] = df[(behav, p)].values
             # Adding actual column
             # TODO: quick flip but make more explicit
-            out_df[(behav, a)] = df[(behav, p)].values * np.array(-1)
+            out_df[(behav, a)] = df[(behav, p)].values * -1
             # Adding user_behav columns
             for i in user_behavs:
                 out_df[(behav, i)] = 0
@@ -125,7 +131,7 @@ class BehavMixin:
             all_behavs[bout.behaviour] |= set(bout.user_defined.keys())
 
         # construct ret_df with index from given start and stop, and all_behavs dict
-        ret_df = BehavMixin.init_df(np.arange(bouts.start, bouts.stop))
+        ret_df = BoutsDfMixin.init_df(np.arange(bouts.start, bouts.stop))
         for behav, outcomes in all_behavs.items():
             for outcome in outcomes:
                 ret_df[(behav, outcome)] = 0
@@ -146,7 +152,7 @@ class BehavMixin:
         return ret_df
 
     @staticmethod
-    def init_df(frame_vect: pd.Series | pd.Index | np.ndarray) -> pd.DataFrame:
+    def init_df(frame_vect: pd.Series | pd.Index) -> pd.DataFrame:
         """
         Returning a frame-by-frame analysis_df with the frame number (according to original video)
         as the MultiIndex index, relative to the first element of frame_vect.
@@ -163,10 +169,8 @@ class BehavMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=DFIOMixin.enum_to_list(BehavIN)[0]),
-            columns=pd.MultiIndex.from_tuples(
-                (), names=DFIOMixin.enum_to_list(BehavCN)
-            ),
+            index=pd.Index(frame_vect, name=DFIOMixin.enum2tuple(BehavIN)[0]),
+            columns=pd.MultiIndex.from_tuples((), names=DFIOMixin.enum2tuple(BehavCN)),
         )
 
     @staticmethod
@@ -195,7 +199,7 @@ class BehavMixin:
         # Reading
         df = DFIOMixin.read_feather(fp)
         # Checking
-        BehavMixin.check_df(df)
+        BoutsDfMixin.check_df(df)
         # Returning
         return df
 
@@ -223,11 +227,10 @@ class BehavMixin:
         Importing Boris TSV file.
         """
         # Making df structure
-        df = BehavMixin.init_df(np.arange(start_frame, stop_frame))
+        df = BoutsDfMixin.init_df(np.arange(start_frame, stop_frame))
         # Reading in corresponding BORIS tsv file
         df_boris = pd.read_csv(fp, sep="\t")
-        # Initialising new classification columns based on
-        # BORIS behavs and given `behavs_ls`
+        # Initialising new classification column based on BORIS filename and behaviour name
         # TODO: how to reconcile this with the behavs_ls?
         for behav in df_boris["Behavior"].unique():
             df[(behav, BehavColumns.ACTUAL.value)] = 0

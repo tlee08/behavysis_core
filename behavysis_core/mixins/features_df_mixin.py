@@ -11,8 +11,12 @@ from behavysis_core.constants import FeaturesCN, FeaturesIN, IndivColumns
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
 
-class FeaturesMixin:
-    """__summary__"""
+class FeaturesDfMixin:
+    """
+    Mixin for features DF
+    (generated from SimBA feature extraction)
+    functions.
+    """
 
     @staticmethod
     def check_bpts_exist(df: pd.DataFrame, bodyparts: list) -> None:
@@ -63,7 +67,7 @@ class FeaturesMixin:
         # Filtering out any single and processing columns
         for i in [IndivColumns.PROCESS.value, IndivColumns.SINGLE.value]:
             if i in columns.unique("individuals"):
-                columns = columns.drop(i, level="individuals")
+                columns = columns.drop(i, level="individuals")  # type: ignore
         # Getting individuals list
         indivs = columns.unique("individuals").to_list()
         # Getting bodyparts list
@@ -88,9 +92,9 @@ class FeaturesMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=DFIOMixin.enum_to_list(FeaturesIN)[0]),
+            index=pd.Index(frame_vect, name=DFIOMixin.enum2tuple(FeaturesIN)[0]),
             columns=pd.MultiIndex.from_tuples(
-                (), names=DFIOMixin.enum_to_list(FeaturesCN)
+                (), names=DFIOMixin.enum2tuple(FeaturesCN)
             ),
         )
 
@@ -120,6 +124,6 @@ class FeaturesMixin:
         # Reading
         df = DFIOMixin.read_feather(fp)
         # Checking
-        FeaturesMixin.check_df(df)
+        FeaturesDfMixin.check_df(df)
         # Returning
         return df
