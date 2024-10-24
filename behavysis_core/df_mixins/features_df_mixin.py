@@ -9,7 +9,7 @@ from enum import Enum
 import pandas as pd
 
 from behavysis_core.constants import FramesIN
-from behavysis_core.mixins.df_io_mixin import DFIOMixin
+from behavysis_core.df_mixins.df_io_mixin import DFIOMixin
 
 ####################################################################################################
 # DATAFRAME CONSTANTS
