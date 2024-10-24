@@ -158,11 +158,11 @@ class ConfigsAuto(PydanticBaseModel):
     raw_vid: VidMetadata = VidMetadata()
     formatted_vid: VidMetadata = VidMetadata()
 
-    px_per_mm: None | float = None
-    start_frame: None | int = None
-    stop_frame: None | int = None
-    exp_dur_frames: None | int = None
-    scorer_name: None | str = None
+    px_per_mm: float = -1
+    start_frame: int = -1
+    stop_frame: int = -1
+    exp_dur_frames: int = -1
+    scorer_name: str = "-1"
 
 
 class ConfigsRef(PydanticBaseModel):
