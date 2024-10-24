@@ -36,7 +36,7 @@ FILE_EXTS = {
 # TODO: is there a better way to do the subsubdirs?
 DIAGNOSTICS_DIR = "0_diagnostics"
 ANALYSIS_DIR = "8_analysis"
-ANALYSIS_COMBINED_DIR = "9_analysis"
+ANALYSIS_COMBINED_DIR = "9_analysis_combined"
 EVALUATE_DIR = "10_evaluate"
 TEMP_DIR = ".temp"
 

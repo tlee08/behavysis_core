@@ -9,10 +9,7 @@ import os
 from enum import EnumType
 from typing import Callable
 
-import numpy as np
 import pandas as pd
-
-from behavysis_core.constants import DLC_HDF_KEY, KeypointsCN
 
 
 class DFIOMixin:
@@ -56,8 +53,7 @@ class DFIOMixin:
         """
         Reading DLC csv file.
         """
-        col_levels = DFIOMixin.enum2tuple(KeypointsCN)
-        return pd.read_csv(fp, header=np.arange(len(col_levels)).tolist(), index_col=0)
+        return pd.read_csv(fp, index_col=0)
 
     @staticmethod
     @__write_decorator
@@ -73,7 +69,7 @@ class DFIOMixin:
         """
         Reading h5 file.
         """
-        return pd.DataFrame(pd.read_hdf(fp, key=DLC_HDF_KEY, mode="r"))
+        return pd.DataFrame(pd.read_hdf(fp, mode="r"))
 
     @staticmethod
     @__write_decorator
@@ -81,7 +77,8 @@ class DFIOMixin:
         """
         Writing dataframe h5 file.
         """
-        df.to_hdf(fp, key=DLC_HDF_KEY, mode="w")
+        # df.to_hdf(fp, key=DLC_HDF_KEY, mode="w")
+        df.to_hdf(fp, mode="w")
 
     @staticmethod
     @__read_decorator
