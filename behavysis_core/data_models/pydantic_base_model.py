@@ -35,7 +35,7 @@ class PydanticBaseModel(BaseModel):
     def write_json(self, fp: str) -> None:
         """
         Writes the given configs model to the configs file (i.e. hence updating the file).
-        
+
         Makes the directory if it doesn't exist.
 
         Parameters
@@ -75,6 +75,29 @@ class PydanticBaseModel(BaseModel):
         Returns the nested field names of the class as
         a list of tuples.
         Each tuple is a nested field name combination.
+
+        For example, the following
+        ```
+        {
+            "field1" : {
+                "fieldA": xxx,
+                "fieldB": {
+                    "fieldI": xxx,
+                    "fieldII": xxx,
+                }
+            },
+            "field2": xxx
+        }
+        ```
+        Becomes
+        ```
+        [
+            ("field1", "fieldA"),
+            ("field1", "fieldB", "fieldI"),
+            ("field1", "fieldB", "fieldII"),
+            ("field2",),
+        ]
+        ```
         """
         fields = []
         # For each field in the class

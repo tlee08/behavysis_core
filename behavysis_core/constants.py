@@ -38,8 +38,9 @@ DIAGNOSTICS_DIR = "0_diagnostics"
 EVALUATE_DIR = "9_evaluate"
 TEMP_DIR = ".temp"
 
+
 ####################################################################################################
-# KEYPOINTS DATAFRAME CONSTANTS
+# DATAFRAME CONSTANTS
 ####################################################################################################
 
 
@@ -48,48 +49,6 @@ class FramesIN(Enum):
 
     FRAME = "frame"
 
-
-class KeypointsCN(Enum):
-    """Enum for the columns in the keypoints dataframe."""
-
-    SCORER = "scorer"
-    INDIVIDUALS = "individuals"
-    BODYPARTS = "bodyparts"
-    COORDS = "coords"
-
-
-class Coords(Enum):
-    """Enum for the coordinates in the keypoints dataframe."""
-
-    X = "x"
-    Y = "y"
-    LIKELIHOOD = "likelihood"
-
-
-KeypointsIN = FramesIN
-
-DLC_HDF_KEY = "data"
-
-
-class IndivColumns(Enum):
-    """Enum for the individuals level in the columns of the keypoints dataframe."""
-
-    SINGLE = "single"
-    PROCESS = "processed"  # TODO: remove this
-
-
-####################################################################################################
-# EXTRACTED FEATURES DATAFRAME CONSTANTS
-####################################################################################################
-
-
-class FeaturesCN(Enum):
-    """Enum for the columns in the extracted features dataframe."""
-
-    FEATURES = "features"
-
-
-FeaturesIN = FramesIN
 
 ####################################################################################################
 # BEHAVIOUR DATAFRAME CONSTANTS

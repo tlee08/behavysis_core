@@ -12,7 +12,16 @@ from behavysis_core.constants import BehavCN, BehavColumns, BehavIN
 from behavysis_core.data_models.bouts import Bouts
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
-# TODO
+# TODO: should we combine with BehavDfMixin?
+
+####################################################################################################
+# DATAFRAME CONSTANTS
+####################################################################################################
+
+
+####################################################################################################
+# MIXIN CLASS
+####################################################################################################
 
 
 class BoutsDfMixin:
@@ -23,7 +32,7 @@ class BoutsDfMixin:
     """
 
     @staticmethod
-    def vect_2_bouts(vect: np.ndarray | pd.Series) -> pd.DataFrame:
+    def vect2bouts(vect: np.ndarray | pd.Series) -> pd.DataFrame:
         """
         Will return a dataframe with the start and stop indexes of each contiguous set of
         positive values (i.e. a bout).
@@ -61,7 +70,7 @@ class BoutsDfMixin:
         # For each behaviour
         for behav in frames_df.columns.unique(BehavCN.BEHAVIOURS.value):
             # Getting start-stop of each bout
-            start_stop_df = BoutsDfMixin.vect_2_bouts(frames_df[(behav, "pred")])
+            start_stop_df = BoutsDfMixin.vect2bouts(frames_df[(behav, "pred")])
             # For each bout (i.e. start-stop pair)
             for _, row in start_stop_df.iterrows():
                 # Getting only the frames in the current bout

@@ -11,6 +11,17 @@ from behavysis_core.constants import BehavCN, BehavColumns, BehavIN
 from behavysis_core.data_models.bouts import Bouts
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
+# TODO: should we combine with BoutsDfMixin?
+
+####################################################################################################
+# DATAFRAME CONSTANTS
+####################################################################################################
+
+
+####################################################################################################
+# MIXIN CLASS
+####################################################################################################
+
 
 class BehavDfMixin:
     """

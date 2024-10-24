@@ -4,17 +4,54 @@ Utility functions.
 
 from __future__ import annotations
 
+from enum import Enum
+
 import numpy as np
 import pandas as pd
 
-from behavysis_core.constants import FeaturesCN, FeaturesIN, IndivColumns
+from behavysis_core.constants import FramesIN
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
+####################################################################################################
+# DATAFRAME CONSTANTS
+####################################################################################################
 
-class FeaturesDfMixin:
+
+class KeypointsCN(Enum):
+    """Enum for the columns in the keypoints dataframe."""
+
+    SCORER = "scorer"
+    INDIVIDUALS = "individuals"
+    BODYPARTS = "bodyparts"
+    COORDS = "coords"
+
+
+class Coords(Enum):
+    """Enum for the coordinates in the keypoints dataframe."""
+
+    X = "x"
+    Y = "y"
+    LIKELIHOOD = "likelihood"
+
+
+class IndivColumns(Enum):
+    """Enum for the `individuals` level's values in the columns of the keypoints dataframe."""
+
+    SINGLE = "single"
+    PROCESS = "processed"  # TODO: remove this
+
+
+DLC_HDF_KEY = "data"
+
+####################################################################################################
+# MIXIN CLASS
+####################################################################################################
+
+
+class KeypointsMixin:
     """
-    Mixin for features DF
-    (generated from SimBA feature extraction)
+    Mixin for behaviour DF
+    (generated from maDLC keypoint detection)
     functions.
     """
 
@@ -49,8 +86,8 @@ class FeaturesDfMixin:
     @staticmethod
     def get_headings(df: pd.DataFrame) -> tuple[list[str], list[str]]:
         """
-        Returns a tuple of the individuals (animals, not "single"), and tuple of the multi-animal
-        bodyparts.
+        Returns a tuple of the individuals (only animals, not "single"), and tuple of
+        the multi-animal bodyparts.
 
         Parameters
         ----------
@@ -65,14 +102,50 @@ class FeaturesDfMixin:
         # Getting column MultiIndex
         columns = df.columns
         # Filtering out any single and processing columns
-        for i in [IndivColumns.PROCESS.value, IndivColumns.SINGLE.value]:
-            if i in columns.unique("individuals"):
-                columns = columns.drop(i, level="individuals")  # type: ignore
+        # Not incl. the `single` or `process`columns
+        columns_filt = np.isin(
+            df.columns.get_level_values(KeypointsCN.INDIVIDUALS.value),
+            [IndivColumns.PROCESS.value, IndivColumns.SINGLE.value],
+            invert=True,
+        )
+        columns = df.columns[columns_filt]
         # Getting individuals list
         indivs = columns.unique("individuals").to_list()
         # Getting bodyparts list
         bpts = columns.unique("bodyparts").to_list()
         return indivs, bpts
+
+    @staticmethod
+    def clean_headings(df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Drops the "scorer" level in the column
+        header of the dataframe. This makes subsequent processing easier.
+
+        Parameters
+        ----------
+        df : pd.DataFrame
+            Keypoints pd.DataFrame.
+
+        Returns
+        -------
+        pd.DataFrame
+            Keypoints pd.DataFrame.
+        """
+        df = df.copy()
+        # Keeping only the "individuals", "bodyparts", and "coords" levels
+        # (i.e. dropping "scorer" level)
+        columns = df.columns.to_frame(index=False)
+        columns = columns[
+            [
+                KeypointsCN.INDIVIDUALS.value,
+                KeypointsCN.BODYPARTS.value,
+                KeypointsCN.COORDS.value,
+            ]
+        ]
+        df.columns = pd.MultiIndex.from_frame(columns)
+        # Grouping the columns by the individuals level for cleaner presentation
+        df = df.sort_index(axis=1)
+        return df
 
     @staticmethod
     def init_df(frame_vect: pd.Series | pd.Index) -> pd.DataFrame:
@@ -92,9 +165,9 @@ class FeaturesDfMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=DFIOMixin.enum2tuple(FeaturesIN)[0]),
+            index=pd.Index(frame_vect, name=DFIOMixin.enum2tuple(FramesIN)[0]),
             columns=pd.MultiIndex.from_tuples(
-                (), names=DFIOMixin.enum2tuple(FeaturesCN)
+                (), names=DFIOMixin.enum2tuple(KeypointsCN)
             ),
         )
 
@@ -112,9 +185,9 @@ class FeaturesDfMixin:
         # Checking for null values
         assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
-        DFIOMixin.check_df_index_names(df, FeaturesIN)
+        DFIOMixin.check_df_index_names(df, FramesIN)
         # Checking that the column levels are correct
-        DFIOMixin.check_df_column_names(df, FeaturesCN)
+        DFIOMixin.check_df_column_names(df, KeypointsCN)
 
     @staticmethod
     def read_feather(fp: str) -> pd.DataFrame:
@@ -124,6 +197,6 @@ class FeaturesDfMixin:
         # Reading
         df = DFIOMixin.read_feather(fp)
         # Checking
-        FeaturesDfMixin.check_df(df)
+        KeypointsMixin.check_df(df)
         # Returning
         return df
