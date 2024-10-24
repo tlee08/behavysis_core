@@ -8,8 +8,8 @@ import numpy as np
 import pandas as pd
 from scipy.stats import mode
 
-from behavysis_core.constants import BehavCN, BehavColumns, BehavIN
 from behavysis_core.data_models.bouts import Bouts
+from behavysis_core.df_mixins.behav_df_mixin import BehavCN, BehavColumns, BehavDfMixin
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
 # TODO: should we combine with BehavDfMixin?
@@ -62,7 +62,7 @@ class BoutsDfMixin:
         return bouts_df
 
     @staticmethod
-    def frames_2_bouts(frames_df: pd.DataFrame) -> Bouts:
+    def frames2bouts(frames_df: pd.DataFrame) -> Bouts:
         """
         Frames df to bouts model object.
         """
@@ -107,7 +107,7 @@ class BoutsDfMixin:
         as the key and a tuple of specific behaviour strs as the value.
         """
         # Keeping the `actual`, `pred`, and all user_behavs columns
-        out_df = BoutsDfMixin.init_df(df.index)
+        out_df = BehavDfMixin.init_df(df.index)
         a = BehavColumns.ACTUAL.value
         p = BehavColumns.PRED.value
         for behav, user_behavs in behav_outcomes.items():
@@ -140,7 +140,7 @@ class BoutsDfMixin:
             all_behavs[bout.behaviour] |= set(bout.user_defined.keys())
 
         # construct ret_df with index from given start and stop, and all_behavs dict
-        ret_df = BoutsDfMixin.init_df(np.arange(bouts.start, bouts.stop))
+        ret_df = BehavDfMixin.init_df(np.arange(bouts.start, bouts.stop))
         for behav, outcomes in all_behavs.items():
             for outcome in outcomes:
                 ret_df[(behav, outcome)] = 0
@@ -159,103 +159,3 @@ class BoutsDfMixin:
                 bout_ret_df.loc[:, (bout.behaviour, k)] = v
         # Returning frames df
         return ret_df
-
-    @staticmethod
-    def init_df(frame_vect: pd.Series | pd.Index) -> pd.DataFrame:
-        """
-        Returning a frame-by-frame analysis_df with the frame number (according to original video)
-        as the MultiIndex index, relative to the first element of frame_vect.
-        Note that that the frame number can thus begin on a non-zero number.
-
-        Parameters
-        ----------
-        frame_vect : pd.Series | pd.Index
-            _description_
-
-        Returns
-        -------
-        pd.DataFrame
-            _description_
-        """
-        return pd.DataFrame(
-            index=pd.Index(frame_vect, name=DFIOMixin.enum2tuple(BehavIN)[0]),
-            columns=pd.MultiIndex.from_tuples((), names=DFIOMixin.enum2tuple(BehavCN)),
-        )
-
-    @staticmethod
-    def check_df(df: pd.DataFrame) -> None:
-        """
-        Checks whether the dataframe is in the correct format for the keypoints functions.
-
-        Checks that:
-
-        - There are no null values.
-        - The column levels are correct.
-        - The index levels are correct.
-        """
-        # Checking for null values
-        assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
-        # Checking that the index levels are correct
-        DFIOMixin.check_df_index_names(df, BehavIN)
-        # Checking that the column levels are correct
-        DFIOMixin.check_df_column_names(df, BehavCN)
-
-    @staticmethod
-    def read_feather(fp: str) -> pd.DataFrame:
-        """
-        Reading feather file.
-        """
-        # Reading
-        df = DFIOMixin.read_feather(fp)
-        # Checking
-        BoutsDfMixin.check_df(df)
-        # Returning
-        return df
-
-    @staticmethod
-    def update_behav(df: pd.DataFrame, behav_src: str, behav_dst: str) -> pd.DataFrame:
-        """
-        Update the behaviour column with the given outcome and value.
-        """
-        # Getting columns
-        columns = df.columns.to_frame(index=False)
-        # Updating the behaviour column
-        columns[BehavCN.BEHAVIOURS.value] = columns[BehavCN.OUTCOMES.value].map(
-            lambda x: behav_dst if x == behav_src else x
-        )
-        # Setting the new columns
-        df.columns = pd.MultiIndex.from_frame(columns)
-        # Returning
-        return df
-
-    @staticmethod
-    def import_boris_tsv(
-        fp: str, behavs_ls: list[str], start_frame: int, stop_frame: int
-    ) -> pd.DataFrame:
-        """
-        Importing Boris TSV file.
-        """
-        # Making df structure
-        df = BoutsDfMixin.init_df(np.arange(start_frame, stop_frame))
-        # Reading in corresponding BORIS tsv file
-        df_boris = pd.read_csv(fp, sep="\t")
-        # Initialising new classification column based on BORIS filename and behaviour name
-        # TODO: how to reconcile this with the behavs_ls?
-        for behav in df_boris["Behavior"].unique():
-            df[(behav, BehavColumns.ACTUAL.value)] = 0
-            df[(behav, BehavColumns.PRED.value)] = 0
-        for behav in behavs_ls:
-            df[(behav, BehavColumns.ACTUAL.value)] = 0
-            df[(behav, BehavColumns.PRED.value)] = 0
-        # Setting the classification values from the BORIS file
-        for ind, row in df_boris.iterrows():
-            # Getting corresponding frame of this event point
-            behav = row["Behavior"]
-            frame = row["Image index"]
-            status = row["Behavior type"]
-            # Updating the classification in the scored df
-            df.loc[frame:, (behav, BehavColumns.ACTUAL.value)] = status == "START"
-            df.loc[frame:, (behav, BehavColumns.PRED.value)] = status == "START"
-        # Setting dtype to int8
-        df = df.astype(np.int8)
-        return df

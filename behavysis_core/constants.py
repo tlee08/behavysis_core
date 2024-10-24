@@ -33,9 +33,11 @@ FILE_EXTS = {
     Folders.SCORED_BEHAVS: ".feather",
 }
 
-ANALYSIS_DIR = "8_analysis"
+# TODO: is there a better way to do the subsubdirs?
 DIAGNOSTICS_DIR = "0_diagnostics"
-EVALUATE_DIR = "9_evaluate"
+ANALYSIS_DIR = "8_analysis"
+ANALYSIS_COMBINED_DIR = "9_analysis"
+EVALUATE_DIR = "10_evaluate"
 TEMP_DIR = ".temp"
 
 
@@ -51,77 +53,9 @@ class FramesIN(Enum):
 
 
 ####################################################################################################
-# BEHAVIOUR DATAFRAME CONSTANTS
-####################################################################################################
-
-
-class BehavCN(Enum):
-    """Enum for the columns in the behaviour dataframe."""
-
-    BEHAVIOURS = "behaviours"
-    OUTCOMES = "outcomes"
-
-
-BehavIN = FramesIN
-
-
-class BehavColumns(Enum):
-    """Enum for the columns in the behaviour dataframe."""
-
-    PROB = "prob"
-    PRED = "pred"
-    ACTUAL = "actual"
-
-
-####################################################################################################
-# ANALYSIS DATAFRAME CONSTANTS
-####################################################################################################
-
-
-class AnalysisCN(Enum):
-    """Enum for the columns in the analysis dataframe."""
-
-    INDIVIDUALS = "individuals"
-    MEASURES = "measures"
-
-
-AnalysisIN = FramesIN
-
-
-class AggAnalysisCN(Enum):
-    """Enum for the columns in the aggregated analysis dataframe."""
-
-    INDIVIDUALS = "individuals"
-    MEASURES = "measures"
-    AGGS = "aggs"
-
-
-AggAnalysisIN = FramesIN
-
-####################################################################################################
 # DIAGNOSTICS CONSTANTS
 ####################################################################################################
 
-DIAGNOSTICS_SUCCESS_MESSAGES = (
-    "Success! Success! Success!!",
-    "Done and DONE!!",
-    "Yay! Completed!",
-    "This process was completed. Good on you :)",
-    "Thumbs up!",
-    "Woohoo!!!",
-    "Phenomenal!",
-    ":) :) :) :) :)",
-    "Go you!",
-    "You are doing awesome!",
-    "You got this!",
-    "You're doing great!",
-    "Sending good vibes.",
-    "I believe in you!",
-    "You're a champion!",
-    "No task too tall :) :)",
-    "A job done well, and a well done job!",
-    "Top job!",
-)
 
 STR_DIV = "".ljust(50, "-")
 

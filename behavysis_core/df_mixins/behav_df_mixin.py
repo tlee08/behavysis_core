@@ -4,10 +4,12 @@ Utility functions.
 
 from __future__ import annotations
 
+from enum import Enum
+
 import numpy as np
 import pandas as pd
 
-from behavysis_core.constants import BehavCN, BehavColumns, BehavIN
+from behavysis_core.constants import FramesIN
 from behavysis_core.data_models.bouts import Bouts
 from behavysis_core.mixins.df_io_mixin import DFIOMixin
 
@@ -16,6 +18,21 @@ from behavysis_core.mixins.df_io_mixin import DFIOMixin
 ####################################################################################################
 # DATAFRAME CONSTANTS
 ####################################################################################################
+
+
+class BehavCN(Enum):
+    """Enum for the columns in the behaviour dataframe."""
+
+    BEHAVIOURS = "behaviours"
+    OUTCOMES = "outcomes"
+
+
+class BehavColumns(Enum):
+    """Enum for the columns in the behaviour dataframe."""
+
+    PROB = "prob"
+    PRED = "pred"
+    ACTUAL = "actual"
 
 
 ####################################################################################################
@@ -119,7 +136,7 @@ class BehavDfMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=DFIOMixin.enum2tuple(BehavIN)[0]),
+            index=pd.Index(frame_vect, name=DFIOMixin.enum2tuple(FramesIN)[0]),
             columns=pd.MultiIndex.from_tuples((), names=DFIOMixin.enum2tuple(BehavCN)),
         )
 
@@ -137,7 +154,7 @@ class BehavDfMixin:
         # Checking for null values
         assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
-        DFIOMixin.check_df_index_names(df, BehavIN)
+        DFIOMixin.check_df_index_names(df, FramesIN)
         # Checking that the column levels are correct
         DFIOMixin.check_df_column_names(df, BehavCN)
 
