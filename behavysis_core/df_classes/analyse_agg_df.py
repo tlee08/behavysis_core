@@ -27,7 +27,7 @@ import pandas as pd
 import seaborn as sns
 
 from behavysis_core.constants import FramesIN
-from behavysis_core.df_mixins.df_mixin import DFMixin
+from behavysis_core.df_classes.df_mixin import DFMixin
 
 ####################################################################################################
 # ANALYSIS DATAFRAME CONSTANTS

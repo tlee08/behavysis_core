@@ -24,17 +24,14 @@ from behavysis_core.pydantic_models.bouts import Bouts
 ####################################################################################################
 
 
-class BoutsDf(DFMixin):
+class BoutsDf:
     """
     Mixin for behaviour DF
     (generated from behavysis behaviour classification)
     functions.
+    NOTE: not actually a DF mixin but used to convert to and from fbf df and bouts json format
+    TODO: is this structure correct?
     """
-
-    # TODO??
-    NULLABLE = True
-    IN = None
-    CN = None
 
     @staticmethod
     def vect2bouts(vect: np.ndarray | pd.Series) -> pd.DataFrame:
