@@ -46,7 +46,7 @@ class IndivColumns(Enum):
 ####################################################################################################
 
 
-class KeypointsMixin(DFMixin):
+class KeypointsDf(DFMixin):
     """
     Mixin for behaviour DF
     (generated from maDLC keypoint detection)

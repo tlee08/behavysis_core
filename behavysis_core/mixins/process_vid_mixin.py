@@ -6,8 +6,8 @@ from __future__ import annotations
 
 import cv2
 
-from behavysis_core.data_models.vid_metadata import VidMetadata
 from behavysis_core.mixins.subproc_mixin import SubprocMixin
+from behavysis_core.pydantic_models.vid_metadata import VidMetadata
 
 
 class ProcessVidMixin:

@@ -8,9 +8,9 @@ from typing import Any
 import matplotlib.pyplot as plt
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from behavysis_core.data_models.pydantic_base_model import PydanticBaseModel
-from behavysis_core.data_models.vid_metadata import VidMetadata
-from behavysis_core.df_mixins.keypoints_df import KeypointsCN
+from behavysis_core.df_classes.keypoints_df import KeypointsCN
+from behavysis_core.pydantic_models.pydantic_base_model import PydanticBaseModel
+from behavysis_core.pydantic_models.vid_metadata import VidMetadata
 
 
 class ConfigsFormatVid(BaseModel):
