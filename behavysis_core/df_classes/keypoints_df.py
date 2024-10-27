@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 
 from behavysis_core.constants import FramesIN
+from behavysis_core.df_classes.df_mixin import DFMixin
 
 ####################################################################################################
 # DATAFRAME CONSTANTS
@@ -45,12 +46,16 @@ class IndivColumns(Enum):
 ####################################################################################################
 
 
-class KeypointsMixin:
+class KeypointsMixin(DFMixin):
     """
     Mixin for behaviour DF
     (generated from maDLC keypoint detection)
     functions.
     """
+
+    NULLABLE = False
+    IN = FramesIN
+    CN = KeypointsCN
 
     @staticmethod
     def check_bpts_exist(df: pd.DataFrame, bodyparts: list) -> None:
@@ -142,58 +147,4 @@ class KeypointsMixin:
         df.columns = pd.MultiIndex.from_frame(columns)
         # Grouping the columns by the individuals level for cleaner presentation
         df = df.sort_index(axis=1)
-        return df
-
-    @staticmethod
-    def init_df(frame_vect: pd.Series | pd.Index) -> pd.DataFrame:
-        """
-        Returning a frame-by-frame analysis_df with the frame number (according to original video)
-        as the MultiIndex index, relative to the first element of frame_vect.
-        Note that that the frame number can thus begin on a non-zero number.
-
-        Parameters
-        ----------
-        frame_vect : pd.Series | pd.Index
-            _description_
-
-        Returns
-        -------
-        pd.DataFrame
-            _description_
-        """
-        return pd.DataFrame(
-            index=pd.Index(frame_vect, name=DFMixin.enum2tuple(FramesIN)[0]),
-            columns=pd.MultiIndex.from_tuples(
-                (), names=DFMixin.enum2tuple(KeypointsCN)
-            ),
-        )
-
-    @staticmethod
-    def check_df(df: pd.DataFrame) -> None:
-        """
-        Checks whether the dataframe is in the correct format for the keypoints functions.
-
-        Checks that:
-
-        - There are no null values.
-        - The column levels are correct.
-        - The index levels are correct.
-        """
-        # Checking for null values
-        assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
-        # Checking that the index levels are correct
-        DFMixin.check_df_index_names(df, FramesIN)
-        # Checking that the column levels are correct
-        DFMixin.check_df_column_names(df, KeypointsCN)
-
-    @staticmethod
-    def read_feather(fp: str) -> pd.DataFrame:
-        """
-        Reading feather file.
-        """
-        # Reading
-        df = DFMixin.read_feather(fp)
-        # Checking
-        KeypointsMixin.check_df(df)
-        # Returning
         return df

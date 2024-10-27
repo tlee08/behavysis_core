@@ -8,9 +8,9 @@ import numpy as np
 import pandas as pd
 from scipy.stats import mode
 
-from behavysis_core.data_models.bouts import Bouts
-from behavysis_core.df_mixins.behav_df_mixin import BehavCN, BehavColumns, BehavDfMixin
-from behavysis_core.df_mixins.df_mixin import DFMixin
+from behavysis_core.df_classes.behav_df import BehavCN, BehavColumns
+from behavysis_core.df_classes.df_mixin import DFMixin
+from behavysis_core.pydantic_models.bouts import Bouts
 
 # TODO: should we combine with BehavDfMixin?
 
@@ -24,12 +24,17 @@ from behavysis_core.df_mixins.df_mixin import DFMixin
 ####################################################################################################
 
 
-class BoutsDfMixin(DFMixin):
+class BoutsDf(DFMixin):
     """
     Mixin for behaviour DF
     (generated from behavysis behaviour classification)
     functions.
     """
+
+    # TODO??
+    NULLABLE = True
+    IN = None
+    CN = None
 
     @staticmethod
     def vect2bouts(vect: np.ndarray | pd.Series) -> pd.DataFrame:
@@ -125,7 +130,7 @@ class BoutsDfMixin(DFMixin):
         return out_df
 
     @staticmethod
-    def bouts_2_frames(bouts: Bouts) -> pd.DataFrame:
+    def bouts2frames(bouts: Bouts) -> pd.DataFrame:
         """
         Bouts model object to frames df.
         """
@@ -140,7 +145,7 @@ class BoutsDfMixin(DFMixin):
             all_behavs[bout.behaviour] |= set(bout.user_defined.keys())
 
         # construct ret_df with index from given start and stop, and all_behavs dict
-        ret_df = BehavDfMixin.init_df(np.arange(bouts.start, bouts.stop))
+        ret_df = BehavDfMixin.init_df(pd.Series(np.arange(bouts.start, bouts.stop)))
         for behav, outcomes in all_behavs.items():
             for outcome in outcomes:
                 ret_df[(behav, outcome)] = 0
