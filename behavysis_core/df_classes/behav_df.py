@@ -50,9 +50,9 @@ class BehavDf(DFMixin):
     IN = FramesIN
     CN = BehavCN
 
-    @staticmethod
+    @classmethod
     def include_user_behavs(
-        df: pd.DataFrame, user_behavs: dict[str, tuple[str]]
+        cls, df: pd.DataFrame, user_behavs: dict[str, tuple[str]]
     ) -> pd.DataFrame:
         """
         Adding the user_behavs columns to the df for each behaviour.
@@ -65,7 +65,7 @@ class BehavDf(DFMixin):
         """
         # TODO: maybe keep `prob` so as to contain in export.py instead?
         # Keeping the `actual`, `pred`, and all user_behavs columns
-        out_df = BehavDfMixin.init_df(df.index)
+        out_df = cls.init_df(df.index)
         a = BehavColumns.ACTUAL.value
         p = BehavColumns.PRED.value
         # For each behaviour, adding `actual`, `pred`, and all user_defined columns
@@ -101,15 +101,15 @@ class BehavDf(DFMixin):
         # Returning
         return df
 
-    @staticmethod
+    @classmethod
     def import_boris_tsv(
-        fp: str, behavs_ls: list[str], start_frame: int, stop_frame: int
+        cls, fp: str, behavs_ls: list[str], start_frame: int, stop_frame: int
     ) -> pd.DataFrame:
         """
         Importing Boris TSV file.
         """
         # Making df structure
-        df = BehavDfMixin.init_df(np.arange(start_frame, stop_frame))
+        df = cls.init_df(np.arange(start_frame, stop_frame))
         # Reading in corresponding BORIS tsv file
         df_boris = pd.read_csv(fp, sep="\t")
         # Initialising new classification columns based on

@@ -8,11 +8,9 @@ import numpy as np
 import pandas as pd
 from scipy.stats import mode
 
-from behavysis_core.df_classes.behav_df import BehavCN, BehavColumns
+from behavysis_core.df_classes.behav_df import BehavCN, BehavColumns, BehavDf
 from behavysis_core.df_classes.df_mixin import DFMixin
 from behavysis_core.pydantic_models.bouts import Bouts
-
-# TODO: should we combine with BehavDfMixin?
 
 ####################################################################################################
 # DATAFRAME CONSTANTS
@@ -24,7 +22,7 @@ from behavysis_core.pydantic_models.bouts import Bouts
 ####################################################################################################
 
 
-class BoutsDf:
+class BoutsDf(BehavDf):
     """
     Mixin for behaviour DF
     (generated from behavysis behaviour classification)
@@ -63,8 +61,8 @@ class BoutsDf:
         bouts_df["dur"] = bouts_df["stop"] - bouts_df["start"] + 1
         return bouts_df
 
-    @staticmethod
-    def frames2bouts(frames_df: pd.DataFrame) -> Bouts:
+    @classmethod
+    def frames2bouts(cls, frames_df: pd.DataFrame) -> Bouts:
         """
         Frames df to bouts model object.
         """
@@ -72,7 +70,7 @@ class BoutsDf:
         # For each behaviour
         for behav in frames_df.columns.unique(BehavCN.BEHAVIOURS.value):
             # Getting start-stop of each bout
-            start_stop_df = BoutsDfMixin.vect2bouts(frames_df[(behav, "pred")])
+            start_stop_df = cls.vect2bouts(frames_df[(behav, "pred")])
             # For each bout (i.e. start-stop pair)
             for _, row in start_stop_df.iterrows():
                 # Getting only the frames in the current bout
@@ -98,9 +96,9 @@ class BoutsDf:
             start=frames_df.index[0], stop=frames_df.index[-1] + 1, bouts=bouts_ls
         )
 
-    @staticmethod
+    @classmethod
     def include_outcome_behavs(
-        df: pd.DataFrame, behav_outcomes: dict[str, tuple[str]]
+        cls, df: pd.DataFrame, behav_outcomes: dict[str, tuple[str]]
     ) -> pd.DataFrame:
         """
         Adding the user_behavs columns to the df for each behaviour.
@@ -109,7 +107,7 @@ class BoutsDf:
         as the key and a tuple of specific behaviour strs as the value.
         """
         # Keeping the `actual`, `pred`, and all user_behavs columns
-        out_df = BehavDfMixin.init_df(df.index)
+        out_df = cls.init_df(df.index)
         a = BehavColumns.ACTUAL.value
         p = BehavColumns.PRED.value
         for behav, user_behavs in behav_outcomes.items():
@@ -117,7 +115,7 @@ class BoutsDf:
             out_df[(behav, p)] = df[(behav, p)].values
             # Adding actual column
             # TODO: quick flip but make more explicit
-            out_df[(behav, a)] = df[(behav, p)].values * -1
+            out_df[(behav, a)] = df[(behav, p)].values * np.array(-1)
             # Adding user_behav columns
             for i in user_behavs:
                 out_df[(behav, i)] = 0
@@ -126,8 +124,8 @@ class BoutsDf:
         # Returning the new df
         return out_df
 
-    @staticmethod
-    def bouts2frames(bouts: Bouts) -> pd.DataFrame:
+    @classmethod
+    def bouts2frames(cls, bouts: Bouts) -> pd.DataFrame:
         """
         Bouts model object to frames df.
         """
@@ -142,7 +140,7 @@ class BoutsDf:
             all_behavs[bout.behaviour] |= set(bout.user_defined.keys())
 
         # construct ret_df with index from given start and stop, and all_behavs dict
-        ret_df = BehavDfMixin.init_df(pd.Series(np.arange(bouts.start, bouts.stop)))
+        ret_df = cls.init_df(pd.Series(np.arange(bouts.start, bouts.stop)))
         for behav, outcomes in all_behavs.items():
             for outcome in outcomes:
                 ret_df[(behav, outcome)] = 0

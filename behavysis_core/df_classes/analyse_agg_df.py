@@ -27,6 +27,8 @@ import pandas as pd
 import seaborn as sns
 
 from behavysis_core.constants import FramesIN
+from behavysis_core.df_classes.analyse_df import AnalyseCN
+from behavysis_core.df_classes.bouts_df import BoutsDf
 from behavysis_core.df_classes.df_mixin import DFMixin
 
 ####################################################################################################
@@ -130,7 +132,7 @@ class AnalyseAggDf(DFMixin):
             # Getting column vector of individual-measure
             vect = analysis_df[col]
             # Getting duration of each behav bout
-            bouts = BoutsDfMixin.vect2bouts(vect == 1)["dur"]
+            bouts = BoutsDf.vect2bouts(vect == 1)["dur"]
             # Converting bouts duration from frames to seconds
             bouts = bouts / fps
             # Getting bout frequency (before it is overwritten if empty)
@@ -180,17 +182,17 @@ class AnalyseAggDf(DFMixin):
         # For each column, displays the mean of each binned group.
         timestamps = analysis_df.index.get_level_values("frame") / fps
         # Ensuring all bins are included (start frame and end frame)
-        bins: np.ndarray = np.asarray(bins_)
+        bins = np.asarray(bins_)
         bins = np.append(0, bins) if np.min(bins) > 0 else bins
         t_max = np.max(timestamps)
         bins = np.append(bins, t_max) if np.max(bins) < t_max else bins
         # Making binned data
-        bin_sec = pd.cut(timestamps, bins=bins, labels=bins[1:], include_lowest=True)
+        bin_sec = pd.cut(timestamps, bins=bins, labels=bins[1:], include_lowest=True)  # type: ignore
         grouped_df = analysis_df.groupby(bin_sec)
         binned_df = grouped_df.apply(
             lambda x: summary_func(x, fps)
             .unstack(DFMixin.enum2tuple(AnalyseCN))
-            .reorder_levels(DFMixin.enum2tuple(AnalyseAggCN))
+            .reorder_levels(list(DFMixin.enum2tuple(AnalyseAggCN)))
             .sort_index(level=DFMixin.enum2tuple(AnalyseCN))
         )
         binned_df.index.name = "bin_sec"
@@ -236,8 +238,9 @@ class AnalyseAggDf(DFMixin):
         g.savefig(out_fp)
         g.figure.clf()
 
-    @staticmethod
+    @classmethod
     def summary_binned_quantitative(
+        cls,
         analysis_df: pd.DataFrame,
         out_dir: str,
         name: str,
@@ -248,19 +251,20 @@ class AnalyseAggDf(DFMixin):
         """
         _summary_
         """
-        return AnalyseAggDf.summary_binned(
+        return cls.summary_binned(
             analysis_df=analysis_df,
             out_dir=out_dir,
             name=name,
             fps=fps,
-            summary_func=AnalyseAggDf.agg_quantitative,
+            summary_func=cls.agg_quantitative,
             agg_column="mean",
             bins_ls=bins_ls,
             cbins_ls=cbins_ls,
         )
 
-    @staticmethod
+    @classmethod
     def summary_binned_behavs(
+        cls,
         analysis_df: pd.DataFrame,
         out_dir: str,
         name: str,
@@ -271,19 +275,20 @@ class AnalyseAggDf(DFMixin):
         """
         _summary_
         """
-        return AnalyseAggDf.summary_binned(
+        return cls.summary_binned(
             analysis_df=analysis_df,
             out_dir=out_dir,
             name=name,
             fps=fps,
-            summary_func=AnalyseAggDf.agg_behavs,
+            summary_func=cls.agg_behavs,
             agg_column="bout_dur_total",
             bins_ls=bins_ls,
             cbins_ls=cbins_ls,
         )
 
-    @staticmethod
+    @classmethod
     def summary_binned(
+        cls,
         analysis_df: pd.DataFrame,
         out_dir: str,
         name: str,
@@ -315,21 +320,19 @@ class AnalyseAggDf(DFMixin):
             )
             # Making binned df
             bins = np.arange(0, np.max(timestamps) + bin_sec, bin_sec)
-            binned_df = AnalyseAggDf.make_binned(analysis_df, fps, bins, summary_func)
+            binned_df = cls.make_binned(analysis_df, fps, bins, summary_func)
             DFMixin.write_feather(binned_df, binned_fp)
             # Making binned plots
-            AnalyseAggDf.make_binned_plot(binned_df, binned_plot_fp, agg_column)
+            cls.make_binned_plot(binned_df, binned_plot_fp, agg_column)
         # Custom binning analysis_df
         if cbins_ls:
             # Making filepaths
             binned_fp = os.path.join(out_dir, "binned_custom", f"{name}.feather")
             binned_plot_fp = os.path.join(out_dir, "binned_custom_plot", f"{name}.png")
             # Making binned df
-            binned_df = AnalyseAggDf.make_binned(
-                analysis_df, fps, cbins_ls, summary_func
-            )
+            binned_df = cls.make_binned(analysis_df, fps, cbins_ls, summary_func)
             DFMixin.write_feather(binned_df, binned_fp)
             # Making binned plots
-            AnalyseAggDf.make_binned_plot(binned_df, binned_plot_fp, agg_column)
+            cls.make_binned_plot(binned_df, binned_plot_fp, agg_column)
         # Returning outcome
         return outcome

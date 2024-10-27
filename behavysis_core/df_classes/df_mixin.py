@@ -83,7 +83,8 @@ class DFMixin:
         # Making the directory if it doesn't exist
         os.makedirs(os.path.dirname(fp), exist_ok=True)
         # Writing the file
-        df.to_hdf(fp, mode="w")  # key=DLC_HDF_KEY
+        DLC_HDF_KEY = "data"
+        df.to_hdf(fp, key=DLC_HDF_KEY, mode="w")
 
     @classmethod
     def write_feather(cls, df: pd.Series | pd.DataFrame, fp: str) -> None:
