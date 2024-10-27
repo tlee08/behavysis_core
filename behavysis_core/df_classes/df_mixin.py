@@ -149,7 +149,7 @@ class DFMixin:
             assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
         if cls.IN:
-            cls.check_CN(df, cls.IN)
+            cls.check_IN(df, cls.IN)
         # Checking that the column levels are correct
         if cls.CN:
             cls.check_CN(df, cls.CN)
