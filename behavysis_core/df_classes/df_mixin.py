@@ -5,9 +5,19 @@ Utility functions.
 from __future__ import annotations
 
 import os
-from enum import EnumType
+from enum import Enum, EnumType
 
 import pandas as pd
+
+####################################################################################################
+# DATAFRAME CONSTANTS
+####################################################################################################
+
+
+class FramesIN(Enum):
+    """Enum for the index in frame-by-frame dataframe."""
+
+    FRAME = "frame"
 
 
 class DFMixin:

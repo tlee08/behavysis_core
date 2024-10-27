@@ -6,22 +6,10 @@ from __future__ import annotations
 
 from enum import Enum
 
-from behavysis_core.constants import FramesIN
-from behavysis_core.df_classes.df_mixin import DFMixin
+from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
 
 ####################################################################################################
-# DATAFRAME CONSTANTS
-####################################################################################################
-
-
-class FeaturesCN(Enum):
-    """Enum for the columns in the extracted features dataframe."""
-
-    FEATURES = "features"
-
-
-####################################################################################################
-# MIXIN CLASS
+# DF CLASS
 ####################################################################################################
 
 
@@ -34,4 +22,9 @@ class FeaturesDfMixin(DFMixin):
 
     NULLABLE = False
     IN = FramesIN
-    CN = FeaturesCN
+    CN = Enum(
+        value="FeaturesCN",
+        names={
+            "FEATURES": "features",
+        },
+    )

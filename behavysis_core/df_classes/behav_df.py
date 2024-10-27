@@ -9,21 +9,13 @@ from enum import Enum
 import numpy as np
 import pandas as pd
 
-from behavysis_core.constants import FramesIN
-from behavysis_core.df_classes.df_mixin import DFMixin
+from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
 
 # TODO: should we combine with BoutsDfMixin?
 
 ####################################################################################################
 # DATAFRAME CONSTANTS
 ####################################################################################################
-
-
-class BehavCN(Enum):
-    """Enum for the columns in the behaviour dataframe."""
-
-    BEHAVIOURS = "behaviours"
-    OUTCOMES = "outcomes"
 
 
 class BehavColumns(Enum):
@@ -35,7 +27,7 @@ class BehavColumns(Enum):
 
 
 ####################################################################################################
-# MIXIN CLASS
+# DF CLASS
 ####################################################################################################
 
 
@@ -48,7 +40,13 @@ class BehavDf(DFMixin):
 
     NULLABLE = False
     IN = FramesIN
-    CN = BehavCN
+    CN = Enum(
+        value="BehavCN",
+        names={
+            "BEHAVIOURS": "behaviours",
+            "OUTCOMES": "outcomes",
+        },
+    )
 
     @classmethod
     def include_user_behavs(
@@ -81,19 +79,21 @@ class BehavDf(DFMixin):
             for k in user_behavs_i:
                 out_df[(behav_i, k)] = 0
         # Ordering by "behaviours" level
-        out_df = out_df.sort_index(axis=1, level=BehavCN.BEHAVIOURS.value)
+        out_df = out_df.sort_index(axis=1, level=cls.CN.BEHAVIOURS.value)
         # Returning the new df
         return out_df
 
-    @staticmethod
-    def update_behav(df: pd.DataFrame, behav_src: str, behav_dst: str) -> pd.DataFrame:
+    @classmethod
+    def update_behav(
+        cls, df: pd.DataFrame, behav_src: str, behav_dst: str
+    ) -> pd.DataFrame:
         """
         Update the behaviour column with the given outcome and value.
         """
         # Getting columns
         columns = df.columns.to_frame(index=False)
         # Updating the behaviour column
-        columns[BehavCN.BEHAVIOURS.value] = columns[BehavCN.OUTCOMES.value].map(
+        columns[cls.CN.BEHAVIOURS.value] = columns[cls.CN.OUTCOMES.value].map(
             lambda x: behav_dst if x == behav_src else x
         )
         # Setting the new columns

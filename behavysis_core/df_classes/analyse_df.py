@@ -24,8 +24,7 @@ from enum import Enum
 import pandas as pd
 import seaborn as sns
 
-from behavysis_core.constants import FramesIN
-from behavysis_core.df_classes.df_mixin import DFMixin
+from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
 from behavysis_core.df_classes.keypoints_df import Coords
 from behavysis_core.mixins.io_mixin import IOMixin
 from behavysis_core.pydantic_models.experiment_configs import ExperimentConfigs
@@ -35,21 +34,14 @@ from behavysis_core.pydantic_models.experiment_configs import ExperimentConfigs
 ####################################################################################################
 
 
-class AnalyseCN(Enum):
-    """Enum for the columns in the analysis dataframe."""
-
-    INDIVIDUALS = "individuals"
-    MEASURES = "measures"
-
-
 FBF = "fbf"
 SUMMARY = "summary"
 BINNED = "binned"
 CUSTOM = "custom"
 
-#####################################################################
-#               ANALYSIS API FUNCS
-#####################################################################
+####################################################################################################
+# DF CLASS
+####################################################################################################
 
 
 class AnalyseDf(DFMixin):
@@ -57,7 +49,13 @@ class AnalyseDf(DFMixin):
 
     NULLABLE = False
     IN = FramesIN
-    CN = AnalyseCN
+    CN = Enum(
+        value="AnalyseCN",
+        names={
+            "INDIVIDUALS": "individuals",
+            "MEASURES": "measures",
+        },
+    )
 
     @staticmethod
     @IOMixin.overwrite_check()

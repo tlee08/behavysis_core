@@ -8,6 +8,7 @@ from typing import Any
 import matplotlib.pyplot as plt
 from pydantic import BaseModel, ConfigDict, field_validator
 
+from behavysis_core.df_classes.df_mixin import DFMixin
 from behavysis_core.df_classes.keypoints_df import KeypointsCN
 from behavysis_core.pydantic_models.pydantic_base_model import PydanticBaseModel
 from behavysis_core.pydantic_models.vid_metadata import VidMetadata
@@ -184,6 +185,10 @@ class ExperimentConfigs(PydanticBaseModel):
         If the val is in the reference format, then
         return reference value of the val if it exists in the reference store.
         Otherwise, return the val itself.
+
+        Note
+        ----
+        The reference format is `"--<ref_name>"`.
         """
         # Check if the value is in the reference format
         if isinstance(val, str) and val.startswith("--"):

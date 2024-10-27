@@ -20,25 +20,11 @@ from __future__ import annotations
 
 from enum import Enum
 
-from behavysis_core.constants import FramesIN
-from behavysis_core.df_classes.df_mixin import DFMixin
+from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
 
 ####################################################################################################
-# ANALYSIS DATAFRAME CONSTANTS
+# DF CLASS
 ####################################################################################################
-
-
-class AnalyseCombineCN(Enum):
-    """Enum for the columns in the analysis dataframe."""
-
-    ANALYSIS = "analysis"
-    INDIVIDUALS = "individuals"
-    MEASURES = "measures"
-
-
-#####################################################################
-#               ANALYSIS API FUNCS
-#####################################################################
 
 
 class AnalyseCombineDf(DFMixin):
@@ -46,4 +32,11 @@ class AnalyseCombineDf(DFMixin):
 
     NULLABLE = False
     IN = FramesIN
-    CN = AnalyseCombineCN
+    CN = Enum(
+        value="AnalyseCombineCN",
+        names={
+            "ANALYSIS": "analysis",
+            "INDIVIDUALS": "individuals",
+            "MEASURES": "measures",
+        },
+    )

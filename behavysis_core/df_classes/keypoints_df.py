@@ -9,21 +9,7 @@ from enum import Enum
 import numpy as np
 import pandas as pd
 
-from behavysis_core.constants import FramesIN
-from behavysis_core.df_classes.df_mixin import DFMixin
-
-####################################################################################################
-# DATAFRAME CONSTANTS
-####################################################################################################
-
-
-class KeypointsCN(Enum):
-    """Enum for the columns in the keypoints dataframe."""
-
-    SCORER = "scorer"
-    INDIVIDUALS = "individuals"
-    BODYPARTS = "bodyparts"
-    COORDS = "coords"
+from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
 
 
 class Coords(Enum):
@@ -42,7 +28,7 @@ class IndivColumns(Enum):
 
 
 ####################################################################################################
-# MIXIN CLASS
+# DF CLASS
 ####################################################################################################
 
 
@@ -55,7 +41,15 @@ class KeypointsDf(DFMixin):
 
     NULLABLE = False
     IN = FramesIN
-    CN = KeypointsCN
+    CN = Enum(
+        value="KeypointsCN",
+        names={
+            "SCORER": "scorer",
+            "INDIVIDUALS": "individuals",
+            "BODYPARTS": "bodyparts",
+            "COORDS": "coords",
+        },
+    )
 
     @staticmethod
     def check_bpts_exist(df: pd.DataFrame, bodyparts: list) -> None:
@@ -85,8 +79,8 @@ class KeypointsDf(DFMixin):
                 msg += f"    - {bp}\n"
             raise ValueError(msg)
 
-    @staticmethod
-    def get_headings(df: pd.DataFrame) -> tuple[list[str], list[str]]:
+    @classmethod
+    def get_headings(cls, df: pd.DataFrame) -> tuple[list[str], list[str]]:
         """
         Returns a tuple of the individuals (only animals, not "single"), and tuple of
         the multi-animal bodyparts.
@@ -106,7 +100,7 @@ class KeypointsDf(DFMixin):
         # Filtering out any single and processing columns
         # Not incl. the `single` or `process`columns
         columns_filt = np.isin(
-            df.columns.get_level_values(KeypointsCN.INDIVIDUALS.value),
+            df.columns.get_level_values(cls.CN.INDIVIDUALS.value),
             [IndivColumns.PROCESS.value, IndivColumns.SINGLE.value],
             invert=True,
         )
@@ -117,8 +111,8 @@ class KeypointsDf(DFMixin):
         bpts = columns.unique("bodyparts").to_list()
         return indivs, bpts
 
-    @staticmethod
-    def clean_headings(df: pd.DataFrame) -> pd.DataFrame:
+    @classmethod
+    def clean_headings(cls, df: pd.DataFrame) -> pd.DataFrame:
         """
         Drops the "scorer" level in the column
         header of the dataframe. This makes subsequent processing easier.
@@ -139,9 +133,9 @@ class KeypointsDf(DFMixin):
         columns = df.columns.to_frame(index=False)
         columns = columns[
             [
-                KeypointsCN.INDIVIDUALS.value,
-                KeypointsCN.BODYPARTS.value,
-                KeypointsCN.COORDS.value,
+                cls.CN.INDIVIDUALS.value,
+                cls.CN.BODYPARTS.value,
+                cls.CN.COORDS.value,
             ]
         ]
         df.columns = pd.MultiIndex.from_frame(columns)
