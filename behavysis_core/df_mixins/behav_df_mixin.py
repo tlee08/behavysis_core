@@ -11,7 +11,7 @@ import pandas as pd
 
 from behavysis_core.constants import FramesIN
 from behavysis_core.data_models.bouts import Bouts
-from behavysis_core.df_mixins.df_io_mixin import DFIOMixin
+from behavysis_core.df_mixins.df_mixin import DFMixin
 
 # TODO: should we combine with BoutsDfMixin?
 
@@ -136,8 +136,8 @@ class BehavDfMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=DFIOMixin.enum2tuple(FramesIN)[0]),
-            columns=pd.MultiIndex.from_tuples((), names=DFIOMixin.enum2tuple(BehavCN)),
+            index=pd.Index(frame_vect, name=DFMixin.enum2tuple(FramesIN)[0]),
+            columns=pd.MultiIndex.from_tuples((), names=DFMixin.enum2tuple(BehavCN)),
         )
 
     @staticmethod
@@ -154,9 +154,9 @@ class BehavDfMixin:
         # Checking for null values
         assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
-        DFIOMixin.check_df_index_names(df, FramesIN)
+        DFMixin.check_df_index_names(df, FramesIN)
         # Checking that the column levels are correct
-        DFIOMixin.check_df_column_names(df, BehavCN)
+        DFMixin.check_df_column_names(df, BehavCN)
 
     @staticmethod
     def read_feather(fp: str) -> pd.DataFrame:
@@ -164,7 +164,7 @@ class BehavDfMixin:
         Reading feather file.
         """
         # Reading
-        df = DFIOMixin.read_feather(fp)
+        df = DFMixin.read_feather(fp)
         # Checking
         BehavDfMixin.check_df(df)
         # Returning

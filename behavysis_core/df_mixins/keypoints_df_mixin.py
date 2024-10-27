@@ -10,7 +10,6 @@ import numpy as np
 import pandas as pd
 
 from behavysis_core.constants import FramesIN
-from behavysis_core.df_mixins.df_io_mixin import DFIOMixin
 
 ####################################################################################################
 # DATAFRAME CONSTANTS
@@ -163,9 +162,9 @@ class KeypointsMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=DFIOMixin.enum2tuple(FramesIN)[0]),
+            index=pd.Index(frame_vect, name=DFMixin.enum2tuple(FramesIN)[0]),
             columns=pd.MultiIndex.from_tuples(
-                (), names=DFIOMixin.enum2tuple(KeypointsCN)
+                (), names=DFMixin.enum2tuple(KeypointsCN)
             ),
         )
 
@@ -183,9 +182,9 @@ class KeypointsMixin:
         # Checking for null values
         assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
-        DFIOMixin.check_df_index_names(df, FramesIN)
+        DFMixin.check_df_index_names(df, FramesIN)
         # Checking that the column levels are correct
-        DFIOMixin.check_df_column_names(df, KeypointsCN)
+        DFMixin.check_df_column_names(df, KeypointsCN)
 
     @staticmethod
     def read_feather(fp: str) -> pd.DataFrame:
@@ -193,7 +192,7 @@ class KeypointsMixin:
         Reading feather file.
         """
         # Reading
-        df = DFIOMixin.read_feather(fp)
+        df = DFMixin.read_feather(fp)
         # Checking
         KeypointsMixin.check_df(df)
         # Returning

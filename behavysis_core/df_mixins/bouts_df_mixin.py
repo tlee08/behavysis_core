@@ -10,7 +10,7 @@ from scipy.stats import mode
 
 from behavysis_core.data_models.bouts import Bouts
 from behavysis_core.df_mixins.behav_df_mixin import BehavCN, BehavColumns, BehavDfMixin
-from behavysis_core.df_mixins.df_io_mixin import DFIOMixin
+from behavysis_core.df_mixins.df_mixin import DFMixin
 
 # TODO: should we combine with BehavDfMixin?
 
@@ -24,7 +24,7 @@ from behavysis_core.df_mixins.df_io_mixin import DFIOMixin
 ####################################################################################################
 
 
-class BoutsDfMixin:
+class BoutsDfMixin(DFMixin):
     """
     Mixin for behaviour DF
     (generated from behavysis behaviour classification)
@@ -87,7 +87,7 @@ class BoutsDfMixin:
                 }
                 # Getting the mode value for the bout (actual, and specific user_behavs)
                 for outcome, values in bout_frames_df[behav].items():
-                    if outcome not in DFIOMixin.enum2tuple(BehavColumns):
+                    if outcome not in DFMixin.enum2tuple(BehavColumns):
                         bout_dict["user_defined"][str(outcome)] = int(mode(values).mode)
                 # Making the Bout model object and appending to bouts_ls
                 bouts_ls.append(bout_dict)

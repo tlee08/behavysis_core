@@ -9,7 +9,6 @@ from enum import Enum
 import pandas as pd
 
 from behavysis_core.constants import FramesIN
-from behavysis_core.df_mixins.df_io_mixin import DFIOMixin
 
 ####################################################################################################
 # DATAFRAME CONSTANTS
@@ -52,10 +51,8 @@ class FeaturesDfMixin:
             _description_
         """
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=DFIOMixin.enum2tuple(FramesIN)[0]),
-            columns=pd.MultiIndex.from_tuples(
-                (), names=DFIOMixin.enum2tuple(FeaturesCN)
-            ),
+            index=pd.Index(frame_vect, name=DFMixin.enum2tuple(FramesIN)[0]),
+            columns=pd.MultiIndex.from_tuples((), names=DFMixin.enum2tuple(FeaturesCN)),
         )
 
     @staticmethod
@@ -72,9 +69,9 @@ class FeaturesDfMixin:
         # Checking for null values
         assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
-        DFIOMixin.check_df_index_names(df, FramesIN)
+        DFMixin.check_df_index_names(df, FramesIN)
         # Checking that the column levels are correct
-        DFIOMixin.check_df_column_names(df, FeaturesCN)
+        DFMixin.check_df_column_names(df, FeaturesCN)
 
     @staticmethod
     def read_feather(fp: str) -> pd.DataFrame:
@@ -82,7 +79,7 @@ class FeaturesDfMixin:
         Reading feather file.
         """
         # Reading
-        df = DFIOMixin.read_feather(fp)
+        df = DFMixin.read_feather(fp)
         # Checking
         FeaturesDfMixin.check_df(df)
         # Returning
