@@ -13,7 +13,7 @@ from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
 ####################################################################################################
 
 
-class FeaturesDfMixin(DFMixin):
+class FeaturesDf(DFMixin):
     """
     Mixin for features DF
     (generated from SimBA feature extraction)
