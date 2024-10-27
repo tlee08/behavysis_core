@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from pydantic import BaseModel, ConfigDict, field_validator
 
 from behavysis_core.df_classes.df_mixin import DFMixin
-from behavysis_core.df_classes.keypoints_df import KeypointsCN
+from behavysis_core.df_classes.keypoints_df import KeypointsDf
 from behavysis_core.pydantic_models.pydantic_base_model import PydanticBaseModel
 from behavysis_core.pydantic_models.vid_metadata import VidMetadata
 
@@ -122,7 +122,7 @@ class ConfigsEvalVid(BaseModel):
     @classmethod
     def validate_colour_level(cls, v):
         """_summary_"""
-        vals = DFMixin.enum2tuple(KeypointsCN)
+        vals = DFMixin.enum2tuple(KeypointsDf.CN)
         return PydanticBaseModel.validate_attr_closed_set(v, vals)
 
 

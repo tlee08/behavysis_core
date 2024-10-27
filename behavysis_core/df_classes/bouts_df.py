@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import mode
 
-from behavysis_core.df_classes.behav_df import BehavCN, BehavColumns, BehavDf
+from behavysis_core.df_classes.behav_df import BehavColumns, BehavDf
 from behavysis_core.df_classes.df_mixin import DFMixin
 from behavysis_core.pydantic_models.bouts import Bouts
 
@@ -63,7 +63,7 @@ class BoutsDf(BehavDf):
         """
         bouts_ls = []
         # For each behaviour
-        for behav in frames_df.columns.unique(BehavCN.BEHAVIOURS.value):
+        for behav in frames_df.columns.unique(BehavDf.CN.BEHAVIOURS.value):
             # Getting start-stop of each bout
             start_stop_df = cls.vect2bouts(frames_df[(behav, "pred")])
             # For each bout (i.e. start-stop pair)
@@ -115,7 +115,7 @@ class BoutsDf(BehavDf):
             for i in user_behavs:
                 out_df[(behav, i)] = 0
         # Ordering by "behaviours" level
-        out_df = out_df.sort_index(axis=1, level=BehavCN.BEHAVIOURS.value)
+        out_df = out_df.sort_index(axis=1, level=BehavDf.CN.BEHAVIOURS.value)
         # Returning the new df
         return out_df
 

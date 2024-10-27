@@ -149,13 +149,13 @@ class DFMixin:
             assert not df.isnull().values.any(), "The dataframe contains null values. Be sure to run interpolate_points first."
         # Checking that the index levels are correct
         if cls.IN:
-            cls.check_df_CN_(df, cls.IN)
+            cls.check_CN(df, cls.IN)
         # Checking that the column levels are correct
         if cls.CN:
-            cls.check_df_CN_(df, cls.CN)
+            cls.check_CN(df, cls.CN)
 
     @staticmethod
-    def check_df_IN_(df: pd.DataFrame, levels: EnumType | tuple[str] | str) -> None:
+    def check_IN(df: pd.DataFrame, levels: EnumType | tuple[str] | str) -> None:
         """__summary__"""
         # Converting `levels` to a tuple
         if isinstance(levels, EnumType):  # If Enum
@@ -167,7 +167,7 @@ class DFMixin:
         ), f"The index level is incorrect. Expected {levels} but got {df.index.names}."
 
     @staticmethod
-    def check_df_CN_(df: pd.DataFrame, levels: EnumType | tuple[str] | str) -> None:
+    def check_CN(df: pd.DataFrame, levels: EnumType | tuple[str] | str) -> None:
         """__summary__"""
         # Converting `levels` to a tuple
         if isinstance(levels, EnumType):  # If Enum
