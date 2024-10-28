@@ -111,6 +111,7 @@ class ConfigsEvalVid(BaseModel):
     colour_level: str = "individuals"
     radius: int | str = 3
     cmap: str = "rainbow"
+    padding: int = 30
 
     @field_validator("cmap")
     @classmethod

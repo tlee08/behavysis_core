@@ -60,7 +60,7 @@ class ProcessVidMixin:
         # TRIMMING
         if stop_sec:
             # Setting stop trim filter in cmd
-            duration = stop_sec - (start_sec if start_sec else 0)
+            duration = stop_sec - (start_sec or 0)
             cmd += ["-t", str(duration)]
             outcome += f"Trimming video to {stop_sec} seconds.\n"
 
