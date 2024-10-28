@@ -26,7 +26,6 @@ import seaborn as sns
 
 from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
 from behavysis_core.df_classes.keypoints_df import Coords
-from behavysis_core.mixins.io_mixin import IOMixin
 from behavysis_core.pydantic_models.experiment_configs import ExperimentConfigs
 
 ####################################################################################################
@@ -58,7 +57,6 @@ class AnalyseDf(DFMixin):
     )
 
     @staticmethod
-    @IOMixin.overwrite_check()
     def get_configs(
         configs: ExperimentConfigs,
     ) -> tuple[
