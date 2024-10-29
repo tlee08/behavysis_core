@@ -106,7 +106,7 @@ class ConfigsEvalVid(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    funcs: list[str] | str = ["keypoints"]
+    funcs: list[str] | str = ["keypoints", "analysis"]
     pcutoff: float | str = 0.8
     colour_level: str = "individuals"
     radius: int | str = 3
