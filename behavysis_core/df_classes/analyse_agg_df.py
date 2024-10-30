@@ -5,7 +5,7 @@ Parameters
 ----------
 dlc_fp : str
     The DLC dataframe filepath of the experiment to analyse.
-analysis_dir : str
+ANALYSE_DIR : str
     The analysis directory path.
 configs_fp : str
     the experiment's JSON configs file.
