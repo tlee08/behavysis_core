@@ -8,10 +8,12 @@ from typing import Any
 import matplotlib.pyplot as plt
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from behavysis_core.df_classes.df_mixin import DFMixin
 from behavysis_core.df_classes.keypoints_df import KeypointsDf
+from behavysis_core.mixins.misc_mixin import MiscMixin
 from behavysis_core.pydantic_models.pydantic_base_model import PydanticBaseModel
 from behavysis_core.pydantic_models.vid_metadata import VidMetadata
+
+# TODO: have a function for selecting auto/user configs. May need to rejig ExperimentConfigs
 
 
 class ConfigsFormatVid(BaseModel):
@@ -101,7 +103,7 @@ class ConfigsEvalKeypointsPlot(BaseModel):
     ]
 
 
-class ConfigsEvalVid(BaseModel):
+class ConfigsEvaluateVid(BaseModel):
     """_summary_"""
 
     model_config = ConfigDict(extra="forbid")
@@ -123,17 +125,8 @@ class ConfigsEvalVid(BaseModel):
     @classmethod
     def validate_colour_level(cls, v):
         """_summary_"""
-        vals = DFMixin.enum2tuple(KeypointsDf.CN)
+        vals = MiscMixin.enum2tuple(KeypointsDf.CN)
         return PydanticBaseModel.validate_attr_closed_set(v, vals)
-
-
-class ConfigsEvaluate(BaseModel):
-    """_summary_"""
-
-    model_config = ConfigDict(extra="forbid")
-
-    keypoints_plot: ConfigsEvalKeypointsPlot = ConfigsEvalKeypointsPlot()
-    eval_vid: ConfigsEvalVid = ConfigsEvalVid()
 
 
 class ConfigsUser(BaseModel):
@@ -148,7 +141,7 @@ class ConfigsUser(BaseModel):
     extract_features: ConfigsExtractFeatures = ConfigsExtractFeatures()
     classify_behaviours: list[ConfigsClassifyBehav] = list()
     analyse: ConfigsAnalyse = ConfigsAnalyse()
-    evaluate: ConfigsEvaluate = ConfigsEvaluate()
+    evaluate_vid: ConfigsEvaluateVid = ConfigsEvaluateVid()
 
 
 class ConfigsAuto(PydanticBaseModel):

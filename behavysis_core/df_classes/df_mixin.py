@@ -9,15 +9,20 @@ from enum import Enum, EnumType
 
 import pandas as pd
 
+from behavysis_core.mixins.misc_mixin import MiscMixin
+
 ####################################################################################################
-# DATAFRAME CONSTANTS
+# DF CONSTANTS
 ####################################################################################################
 
 
 class FramesIN(Enum):
-    """Enum for the index in frame-by-frame dataframe."""
-
     FRAME = "frame"
+
+
+####################################################################################################
+# DF CLASS
+####################################################################################################
 
 
 class DFMixin:
@@ -131,8 +136,8 @@ class DFMixin:
         IN = cls.IN or [None]
         CN = cls.CN or [None]
         return pd.DataFrame(
-            index=pd.Index(frame_vect, name=DFMixin.enum2tuple(IN)[0]),
-            columns=pd.MultiIndex.from_tuples((), names=DFMixin.enum2tuple(CN)),
+            index=pd.Index(frame_vect, name=MiscMixin.enum2tuple(IN)[0]),
+            columns=pd.MultiIndex.from_tuples((), names=MiscMixin.enum2tuple(CN)),
         )
 
     ###############################################################################################
@@ -159,7 +164,7 @@ class DFMixin:
         """__summary__"""
         # Converting `levels` to a tuple
         if isinstance(levels, EnumType):  # If Enum
-            levels = DFMixin.enum2tuple(levels)
+            levels = MiscMixin.enum2tuple(levels)
         elif isinstance(levels, str):  # If str
             levels = (levels,)
         assert (
@@ -171,21 +176,9 @@ class DFMixin:
         """__summary__"""
         # Converting `levels` to a tuple
         if isinstance(levels, EnumType):  # If Enum
-            levels = DFMixin.enum2tuple(levels)
+            levels = MiscMixin.enum2tuple(levels)
         elif isinstance(levels, str):  # If str
             levels = (levels,)
         assert (
             df.columns.names == levels
         ), f"The column level is incorrect. Expected {levels} but got {df.columns.names}."
-
-    ###############################################################################################
-    # Helper funcs (e.g. enum handling)
-    ###############################################################################################
-
-    @staticmethod
-    def enum2tuple(my_enum):
-        """
-        Useful helper function to convert an Enum to a list of its values.
-        Used in `check_df` and `init_df` functions.
-        """
-        return tuple(i.value for i in my_enum)

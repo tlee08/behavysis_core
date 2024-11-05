@@ -9,6 +9,15 @@ from enum import Enum
 from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
 
 ####################################################################################################
+# DF CONSTANTS
+####################################################################################################
+
+
+class FeaturesCN(Enum):
+    FEATURES = "features"
+
+
+####################################################################################################
 # DF CLASS
 ####################################################################################################
 
@@ -22,9 +31,4 @@ class FeaturesDf(DFMixin):
 
     NULLABLE = False
     IN = FramesIN
-    CN = Enum(
-        value="FeaturesCN",
-        names={
-            "FEATURES": "features",
-        },
-    )
+    CN = FeaturesCN

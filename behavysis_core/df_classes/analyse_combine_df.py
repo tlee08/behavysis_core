@@ -23,6 +23,17 @@ from enum import Enum
 from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
 
 ####################################################################################################
+# DF CONSTANTS
+####################################################################################################
+
+
+class AnalyseCombineCN(Enum):
+    ANALYSIS = "analysis"
+    INDIVIDUALS = "individuals"
+    MEASURES = "measures"
+
+
+####################################################################################################
 # DF CLASS
 ####################################################################################################
 
@@ -32,11 +43,4 @@ class AnalyseCombineDf(DFMixin):
 
     NULLABLE = False
     IN = FramesIN
-    CN = Enum(
-        value="AnalyseCombineCN",
-        names={
-            "ANALYSIS": "analysis",
-            "INDIVIDUALS": "individuals",
-            "MEASURES": "measures",
-        },
-    )
+    CN = AnalyseCombineCN

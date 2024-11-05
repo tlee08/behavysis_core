@@ -29,11 +29,24 @@ import seaborn as sns
 from behavysis_core.df_classes.analyse_df import AnalyseDf
 from behavysis_core.df_classes.bouts_df import BoutsDf
 from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
+from behavysis_core.mixins.misc_mixin import MiscMixin
 
 FBF = "fbf"
 SUMMARY = "summary"
 BINNED = "binned"
 CUSTOM = "custom"
+
+
+####################################################################################################
+# DF CONSTANTS
+####################################################################################################
+
+
+class AnalyseAggCN(Enum):
+    INDIVIDUALS = "individuals"
+    MEASURES = "measures"
+    AGGS = "aggs"
+
 
 ####################################################################################################
 # DF CLASS
@@ -45,14 +58,7 @@ class AnalyseAggDf(DFMixin):
 
     NULLABLE = False
     IN = FramesIN
-    CN = Enum(
-        value="AnalyseAggCN",
-        names={
-            "INDIVIDUALS": "individuals",
-            "MEASURES": "measures",
-            "AGGS": "aggs",
-        },
-    )
+    CN = AnalyseAggCN
 
     @classmethod
     def agg_quantitative(cls, analysis_df: pd.DataFrame, fps: float) -> pd.DataFrame:
@@ -185,9 +191,9 @@ class AnalyseAggDf(DFMixin):
         grouped_df = analysis_df.groupby(bin_sec)
         binned_df = grouped_df.apply(
             lambda x: summary_func(x, fps)
-            .unstack(DFMixin.enum2tuple(AnalyseDf.CN))
-            .reorder_levels(list(DFMixin.enum2tuple(cls.CN)))
-            .sort_index(level=DFMixin.enum2tuple(AnalyseDf.CN))
+            .unstack(MiscMixin.enum2tuple(AnalyseDf.CN))
+            .reorder_levels(list(MiscMixin.enum2tuple(cls.CN)))
+            .sort_index(level=MiscMixin.enum2tuple(AnalyseDf.CN))
         )
         binned_df.index.name = "bin_sec"
         # returning binned_df
@@ -204,7 +210,7 @@ class AnalyseAggDf(DFMixin):
         """
         # Making binned_df long
         binned_stacked_df = (
-            binned_df.stack(DFMixin.enum2tuple(AnalyseDf.CN))[agg_column]
+            binned_df.stack(MiscMixin.enum2tuple(AnalyseDf.CN))[agg_column]
             .rename("value")
             .reset_index()
         )

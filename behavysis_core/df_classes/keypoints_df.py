@@ -11,20 +11,27 @@ import pandas as pd
 
 from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
 
+####################################################################################################
+# DF CONSTANTS
+####################################################################################################
+
 
 class Coords(Enum):
-    """Enum for the coordinates in the keypoints dataframe."""
-
     X = "x"
     Y = "y"
     LIKELIHOOD = "likelihood"
 
 
 class IndivColumns(Enum):
-    """Enum for the `individuals` level's values in the columns of the keypoints dataframe."""
-
     SINGLE = "single"
     PROCESS = "processed"  # TODO: remove this
+
+
+class KeypointsCN(Enum):
+    SCORER = "scorer"
+    INDIVIDUALS = "individuals"
+    BODYPARTS = "bodyparts"
+    COORDS = "coords"
 
 
 ####################################################################################################
@@ -41,15 +48,7 @@ class KeypointsDf(DFMixin):
 
     NULLABLE = False
     IN = FramesIN
-    CN = Enum(
-        value="KeypointsCN",
-        names={
-            "SCORER": "scorer",
-            "INDIVIDUALS": "individuals",
-            "BODYPARTS": "bodyparts",
-            "COORDS": "coords",
-        },
-    )
+    CN = KeypointsCN
 
     @staticmethod
     def check_bpts_exist(df: pd.DataFrame, bodyparts: list) -> None:

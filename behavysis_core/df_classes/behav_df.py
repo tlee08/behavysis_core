@@ -14,16 +14,19 @@ from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
 # TODO: should we combine with BoutsDfMixin?
 
 ####################################################################################################
-# DATAFRAME CONSTANTS
+# DF CONSTANTS
 ####################################################################################################
 
 
 class BehavColumns(Enum):
-    """Enum for the columns in the behaviour dataframe."""
-
     PROB = "prob"
     PRED = "pred"
     ACTUAL = "actual"
+
+
+class BehavCN(Enum):
+    BEHAVIOURS = "behaviours"
+    OUTCOMES = "outcomes"
 
 
 ####################################################################################################
@@ -40,13 +43,7 @@ class BehavDf(DFMixin):
 
     NULLABLE = False
     IN = FramesIN
-    CN = Enum(
-        value="BehavCN",
-        names={
-            "BEHAVIOURS": "behaviours",
-            "OUTCOMES": "outcomes",
-        },
-    )
+    CN = BehavCN
 
     @classmethod
     def include_user_behavs(

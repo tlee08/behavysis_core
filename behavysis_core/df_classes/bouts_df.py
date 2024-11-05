@@ -9,7 +9,7 @@ import pandas as pd
 from scipy.stats import mode
 
 from behavysis_core.df_classes.behav_df import BehavColumns, BehavDf
-from behavysis_core.df_classes.df_mixin import DFMixin
+from behavysis_core.mixins.misc_mixin import MiscMixin
 from behavysis_core.pydantic_models.bouts import Bouts
 
 ####################################################################################################
@@ -82,7 +82,7 @@ class BoutsDf(BehavDf):
                 }
                 # Getting the mode value for the bout (actual, and specific user_behavs)
                 for outcome, values in bout_frames_df[behav].items():
-                    if outcome not in DFMixin.enum2tuple(BehavColumns):
+                    if outcome not in MiscMixin.enum2tuple(BehavColumns):
                         bout_dict["user_defined"][str(outcome)] = int(mode(values).mode)
                 # Making the Bout model object and appending to bouts_ls
                 bouts_ls.append(bout_dict)

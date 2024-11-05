@@ -21,26 +21,25 @@ class Folders(Enum):
     PREDICTED_BEHAVS = "6_predicted_behavs"
     SCORED_BEHAVS = "7_scored_behavs"
     # ANALYSIS = "8_analysis"
-    ANALYSIS_COMBINED = "9_analysis_combined"
-    # EVALUATE = "10_evaluate"
+    ANALYSE_COMBINED = "9_analysis_combined"
+    EVALUATE = "10_evaluate_video"
 
 
-FILE_EXTS = {
-    Folders.CONFIGS: ".json",
-    Folders.RAW_VID: ".mp4",
-    Folders.FORMATTED_VID: ".mp4",
-    Folders.DLC: ".feather",
-    Folders.PREPROCESSED: ".feather",
-    Folders.FEATURES_EXTRACTED: ".feather",
-    Folders.PREDICTED_BEHAVS: ".feather",
-    Folders.SCORED_BEHAVS: ".feather",
-    Folders.ANALYSIS_COMBINED: ".feather",
-}
+class FileExts(Enum):
+    CONFIGS = ".json"
+    RAW_VID = ".mp4"
+    FORMATTED_VID = ".mp4"
+    DLC = ".feather"
+    PREPROCESSED = ".feather"
+    FEATURES_EXTRACTED = ".feather"
+    PREDICTED_BEHAVS = ".feather"
+    SCORED_BEHAVS = ".feather"
+    ANALYSIS_COMBINED = ".feather"
+
 
 # TODO: is there a better way to do the subsubdirs?
 DIAGNOSTICS_DIR = "0_diagnostics"
-ANALYSE_DIR = "8_analysis"
-EVALUATE_DIR = "10_evaluate"
+ANALYSIS_DIR = "8_analysis"
 TEMP_DIR = ".temp"
 
 

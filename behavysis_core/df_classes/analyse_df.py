@@ -29,7 +29,7 @@ from behavysis_core.df_classes.keypoints_df import Coords
 from behavysis_core.pydantic_models.experiment_configs import ExperimentConfigs
 
 ####################################################################################################
-# ANALYSIS DATAFRAME CONSTANTS
+# DF CONSTANTS
 ####################################################################################################
 
 
@@ -37,6 +37,12 @@ FBF = "fbf"
 SUMMARY = "summary"
 BINNED = "binned"
 CUSTOM = "custom"
+
+
+class AnalyseCN(Enum):
+    INDIVIDUALS = "individuals"
+    MEASURES = "measures"
+
 
 ####################################################################################################
 # DF CLASS
@@ -48,13 +54,7 @@ class AnalyseDf(DFMixin):
 
     NULLABLE = False
     IN = FramesIN
-    CN = Enum(
-        value="AnalyseCN",
-        names={
-            "INDIVIDUALS": "individuals",
-            "MEASURES": "measures",
-        },
-    )
+    CN = AnalyseCN
 
     @staticmethod
     def get_configs(
