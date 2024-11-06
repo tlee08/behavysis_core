@@ -34,7 +34,7 @@ class FileExts(Enum):
     FEATURES_EXTRACTED = ".feather"
     PREDICTED_BEHAVS = ".feather"
     SCORED_BEHAVS = ".feather"
-    ANALYSIS_COMBINED = ".feather"
+    ANALYSE_COMBINED = ".feather"
 
 
 # TODO: is there a better way to do the subsubdirs?
