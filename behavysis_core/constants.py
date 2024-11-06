@@ -22,7 +22,7 @@ class Folders(Enum):
     SCORED_BEHAVS = "7_scored_behavs"
     # ANALYSIS = "8_analysis"
     ANALYSE_COMBINED = "9_analysis_combined"
-    EVALUATE = "10_evaluate_video"
+    EVALUATE_VID = "10_evaluate_vid"
 
 
 class FileExts(Enum):
@@ -35,6 +35,7 @@ class FileExts(Enum):
     PREDICTED_BEHAVS = ".feather"
     SCORED_BEHAVS = ".feather"
     ANALYSE_COMBINED = ".feather"
+    EVALUATE_VID = ".mp4"
 
 
 # TODO: is there a better way to do the subsubdirs?
