@@ -2,6 +2,8 @@
 _summary_
 """
 
+import os
+import pathlib
 from enum import Enum
 
 ####################################################################################################
@@ -41,7 +43,8 @@ class FileExts(Enum):
 # TODO: is there a better way to do the subsubdirs?
 DIAGNOSTICS_DIR = "0_diagnostics"
 ANALYSIS_DIR = "8_analysis"
-TEMP_DIR = ".temp"
+
+TEMP_DIR = os.path.join(pathlib.Path.home(), ".behavysis_temp")
 
 
 ####################################################################################################
