@@ -39,7 +39,7 @@ class DFMixin:
     @classmethod
     def read_dlc_csv(cls, fp: str) -> pd.DataFrame:
         """
-        Reading DLC csv file.
+        Reading DLC dataframe csv file.
         """
         # Reading the file
         df = pd.read_csv(fp, index_col=0)
@@ -53,7 +53,7 @@ class DFMixin:
     @classmethod
     def read_h5(cls, fp: str) -> pd.DataFrame:
         """
-        Reading h5 file.
+        Reading dataframe h5 file.
         """
         df = pd.DataFrame(pd.read_hdf(fp, mode="r"))
         # Sorting by index
@@ -66,7 +66,7 @@ class DFMixin:
     @classmethod
     def read_feather(cls, fp: str) -> pd.DataFrame:
         """
-        Reading feather file.
+        Reading dataframe feather file.
         """
         df = pd.read_feather(fp)
         # Sorting by index
@@ -75,6 +75,28 @@ class DFMixin:
         cls.check_df(df)
         # Returning
         return df
+
+    @classmethod
+    def read_parquet(cls, fp: str) -> pd.DataFrame:
+        """
+        Reading dataframe parquet file.
+        """
+        df = pd.read_parquet(fp)
+        # Sorting by index
+        df = df.sort_index()
+        # Checking
+        cls.check_df(df)
+        # Returning
+        return df
+
+    @classmethod
+    def read(cls, fp: str) -> pd.DataFrame:
+        """
+        Default dataframe read method.
+
+        `cls.read_parquet`
+        """
+        return cls.read_parquet(fp)
 
     ###############################################################################################
     # DF Write Functions
@@ -110,6 +132,25 @@ class DFMixin:
         os.makedirs(os.path.dirname(fp), exist_ok=True)
         # Writing the file
         df.to_feather(fp)
+
+    @classmethod
+    def write_parquet(cls, df: pd.DataFrame, fp: str) -> None:
+        """
+        Writing dataframe feather file.
+        """
+        # Making the directory if it doesn't exist
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
+        # Writing the file
+        df.to_parquet(fp)
+
+    @classmethod
+    def write(cls, df: pd.DataFrame, fp: str) -> None:
+        """
+        Default dataframe read method.
+
+        `cls.write_parquet`
+        """
+        return cls.write_parquet(df, fp)
 
     ###############################################################################################
     # DF init functions
