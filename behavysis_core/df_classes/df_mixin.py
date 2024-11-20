@@ -94,9 +94,9 @@ class DFMixin:
         """
         Default dataframe read method.
 
-        `cls.read_parquet`
+        `cls.read_feather`
         """
-        return cls.read_parquet(fp)
+        return cls.read_feather(fp)
 
     ###############################################################################################
     # DF Write Functions
@@ -148,9 +148,9 @@ class DFMixin:
         """
         Default dataframe read method.
 
-        `cls.write_parquet`
+        `cls.write_feather`
         """
-        return cls.write_parquet(df, fp)
+        return cls.write_feather(df, fp)
 
     ###############################################################################################
     # DF init functions

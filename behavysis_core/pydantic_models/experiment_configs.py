@@ -72,7 +72,7 @@ class ConfigsClassifyBehav(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     model_fp: str = os.path.join(".")  # FilePath
-    pcutoff: float | str | None = None
+    pcutoff: float | str = -1
     min_window_frames: int | str = 1
     user_behavs: list[str] | str = []
 

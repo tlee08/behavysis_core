@@ -72,7 +72,7 @@ class KeypointsDf(DFMixin):
         if not bodyparts_exist.all():
             msg = (
                 "Some bodyparts in the config file are missing from the csv file.\n"
-                + "They are:\n"
+                "They are:\n"
             )
             for bp in np.array(bodyparts)[~bodyparts_exist]:
                 msg += f"    - {bp}\n"
