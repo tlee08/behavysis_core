@@ -46,41 +46,6 @@ class BehavDf(DFMixin):
     CN = BehavCN
 
     @classmethod
-    def include_user_behavs(
-        cls, df: pd.DataFrame, user_behavs: dict[str, tuple[str]]
-    ) -> pd.DataFrame:
-        """
-        Adding the user_behavs columns to the df for each behaviour.
-
-        Expects `behav_outcomes` to be a dictionary
-        with the auto-classifier behaviour str as the key
-        and a tuple of user behaviour strs as the value.
-
-        Also adds the `actual` and `pred` columns for each behaviour (but doesn't include `prob`).
-        """
-        # TODO: maybe keep `prob` so as to contain in export.py instead?
-        # Keeping the `actual`, `pred`, and all user_behavs columns
-        out_df = cls.init_df(df.index)
-        a = BehavColumns.ACTUAL.value
-        p = BehavColumns.PRED.value
-        # For each behaviour, adding `actual`, `pred`, and all user_defined columns
-        for behav_i, user_behavs_i in user_behavs.items():
-            # Adding pred column
-            out_df[(behav_i, p)] = df[(behav_i, p)].values
-            # NOTE: unsure why we had the "quick flip" before
-            # # Adding actual column and setting to "undecided" (-1)
-            # # TODO: quick flip but make more explicit
-            # out_df[(behav, a)] = df[(behav, p)].values * np.array(-1)
-            out_df[(behav_i, a)] = df[(behav_i, a)].values
-            # Adding user_behav columns
-            for k in user_behavs_i:
-                out_df[(behav_i, k)] = 0
-        # Ordering by "behaviours" level
-        out_df = out_df.sort_index(axis=1, level=cls.CN.BEHAVIOURS.value)
-        # Returning the new df
-        return out_df
-
-    @classmethod
     def update_behav(
         cls, df: pd.DataFrame, behav_src: str, behav_dst: str
     ) -> pd.DataFrame:
