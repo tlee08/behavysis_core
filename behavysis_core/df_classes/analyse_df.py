@@ -95,17 +95,17 @@ class AnalyseDf(DFMixin):
 
     @staticmethod
     def make_location_scatterplot(
-        analysis_df: pd.DataFrame, roi_c_df: pd.DataFrame, out_fp, measure: str
+        scatter_df: pd.DataFrame, corners_df: pd.DataFrame, out_fp, measure: str
     ):
         """
         Expects analysis_df index levels to be (frame,),
         and column levels to be (individual, measure).
         """
-        analysis_stacked_df = analysis_df.stack(level="individuals").reset_index(
+        scatter_stacked_df = scatter_df.stack(level="individuals").reset_index(
             "individuals"
         )
         g = sns.relplot(
-            data=analysis_stacked_df,
+            data=scatter_stacked_df,
             x=Coords.X.value,
             y=Coords.Y.value,
             hue=measure,
@@ -113,7 +113,7 @@ class AnalyseDf(DFMixin):
             kind="scatter",
             col_wrap=2,
             height=8,
-            aspect=0.5 * analysis_stacked_df["individuals"].nunique(),
+            aspect=0.5 * scatter_stacked_df["individuals"].nunique(),
             alpha=0.8,
             linewidth=0,
             marker=".",
@@ -123,16 +123,16 @@ class AnalyseDf(DFMixin):
         # Invert the y axis
         g.axes[0].invert_yaxis()
         # Adding region definition (from roi_df) to the plot
-        roi_c_df = pd.concat(
-            [roi_c_df, roi_c_df.groupby("group").first().reset_index()],
+        corners_df = pd.concat(
+            [corners_df, corners_df.groupby("roi").first().reset_index()],
             ignore_index=True,
         )
         for ax in g.axes:
             sns.lineplot(
-                data=roi_c_df,
+                data=corners_df,
                 x=Coords.X.value,
                 y=Coords.Y.value,
-                hue="group",
+                hue="roi",
                 # color=(1, 0, 0),
                 linewidth=1,
                 marker="+",
