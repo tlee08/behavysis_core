@@ -28,7 +28,7 @@ import seaborn as sns
 
 from behavysis_core.df_classes.analyse_df import AnalyseDf
 from behavysis_core.df_classes.bouts_df import BoutsDf
-from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
+from behavysis_core.df_classes.df_mixin import DFMixin
 from behavysis_core.mixins.misc_mixin import MiscMixin
 
 FBF = "fbf"
@@ -48,6 +48,10 @@ class AnalyseBinnedCN(Enum):
     AGGS = "aggs"
 
 
+class AnalyseBinnedIN(Enum):
+    BIN_SEC = "bin_sec"
+
+
 ####################################################################################################
 # DF CLASS
 ####################################################################################################
@@ -57,7 +61,7 @@ class AnalyseBinnedDf(DFMixin):
     """__summary__"""
 
     NULLABLE = False
-    IN = FramesIN
+    IN = AnalyseBinnedIN
     CN = AnalyseBinnedCN
 
     @classmethod
@@ -195,7 +199,7 @@ class AnalyseBinnedDf(DFMixin):
             .reorder_levels(list(MiscMixin.enum2tuple(cls.CN)))
             .sort_index(level=MiscMixin.enum2tuple(AnalyseDf.CN))
         )
-        binned_df.index.name = "bin_sec"
+        binned_df.index.names = MiscMixin.enum2tuple(AnalyseBinnedIN)
         # returning binned_df
         return binned_df
 
@@ -217,7 +221,7 @@ class AnalyseBinnedDf(DFMixin):
         # Plotting line graph
         g = sns.relplot(
             data=binned_stacked_df,
-            x="bin_sec",
+            x=AnalyseBinnedIN.BIN_SEC.value,
             y="value",
             hue="measures",
             col="individuals",
