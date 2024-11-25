@@ -45,7 +45,7 @@ class DFMixin:
         df = pd.read_csv(fp, index_col=0)
         # Sorting by index
         df = df.sort_index()
-        # Checking
+        # Checking after reading
         cls.check_df(df)
         # Returning
         return df
@@ -58,7 +58,7 @@ class DFMixin:
         df = pd.DataFrame(pd.read_hdf(fp, mode="r"))
         # Sorting by index
         df = df.sort_index()
-        # Checking
+        # Checking after reading
         cls.check_df(df)
         # Returning
         return df
@@ -71,7 +71,7 @@ class DFMixin:
         df = pd.read_feather(fp)
         # Sorting by index
         df = df.sort_index()
-        # Checking
+        # Checking after reading
         cls.check_df(df)
         # Returning
         return df
@@ -84,7 +84,7 @@ class DFMixin:
         df = pd.read_parquet(fp)
         # Sorting by index
         df = df.sort_index()
-        # Checking
+        # Checking after reading
         cls.check_df(df)
         # Returning
         return df
@@ -107,6 +107,8 @@ class DFMixin:
         """
         Writing DLC dataframe to csv file.
         """
+        # Checking before writing
+        cls.check_df(df)
         # Making the directory if it doesn't exist
         os.makedirs(os.path.dirname(fp), exist_ok=True)
         # Writing the file
@@ -117,6 +119,8 @@ class DFMixin:
         """
         Writing dataframe h5 file.
         """
+        # Checking before writing
+        cls.check_df(df)
         # Making the directory if it doesn't exist
         os.makedirs(os.path.dirname(fp), exist_ok=True)
         # Writing the file
@@ -128,6 +132,8 @@ class DFMixin:
         """
         Writing dataframe feather file.
         """
+        # Checking before writing
+        cls.check_df(df)
         # Making the directory if it doesn't exist
         os.makedirs(os.path.dirname(fp), exist_ok=True)
         # Writing the file
@@ -138,6 +144,8 @@ class DFMixin:
         """
         Writing dataframe feather file.
         """
+        # Checking before writing
+        cls.check_df(df)
         # Making the directory if it doesn't exist
         os.makedirs(os.path.dirname(fp), exist_ok=True)
         # Writing the file

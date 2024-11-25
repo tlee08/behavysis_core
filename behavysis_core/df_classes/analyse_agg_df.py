@@ -321,7 +321,7 @@ class AnalyseAggDf(DFMixin):
             # Making binned df
             bins = np.arange(0, np.max(timestamps) + bin_sec, bin_sec)
             binned_df = cls.make_binned(analysis_df, fps, bins, summary_func)
-            DFMixin.write_feather(binned_df, binned_fp)
+            cls.write_feather(binned_df, binned_fp)
             # Making binned plots
             cls.make_binned_plot(binned_df, binned_plot_fp, agg_column)
         # Custom binning analysis_df
@@ -331,7 +331,7 @@ class AnalyseAggDf(DFMixin):
             binned_plot_fp = os.path.join(out_dir, "binned_custom_plot", f"{name}.png")
             # Making binned df
             binned_df = cls.make_binned(analysis_df, fps, cbins_ls, summary_func)
-            DFMixin.write_feather(binned_df, binned_fp)
+            cls.write_feather(binned_df, binned_fp)
             # Making binned plots
             cls.make_binned_plot(binned_df, binned_plot_fp, agg_column)
         # Returning outcome
