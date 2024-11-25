@@ -42,7 +42,7 @@ CUSTOM = "custom"
 ####################################################################################################
 
 
-class AnalyseAggCN(Enum):
+class AnalyseBinnedCN(Enum):
     INDIVIDUALS = "individuals"
     MEASURES = "measures"
     AGGS = "aggs"
@@ -53,12 +53,12 @@ class AnalyseAggCN(Enum):
 ####################################################################################################
 
 
-class AnalyseAggDf(DFMixin):
+class AnalyseBinnedDf(DFMixin):
     """__summary__"""
 
     NULLABLE = False
     IN = FramesIN
-    CN = AnalyseAggCN
+    CN = AnalyseBinnedCN
 
     @classmethod
     def agg_quantitative(cls, analysis_df: pd.DataFrame, fps: float) -> pd.DataFrame:

@@ -38,7 +38,7 @@ class AnalyseCombineCN(Enum):
 ####################################################################################################
 
 
-class AnalyseCombineDf(DFMixin):
+class AnalyseCombinedDf(DFMixin):
     """__summary__"""
 
     NULLABLE = False
