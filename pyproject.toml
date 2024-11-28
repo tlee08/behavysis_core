@@ -26,6 +26,7 @@ tqdm = "^4.30.0"
 ruff = "^0.4.8"
 mkdocs-material = "^9.5.18"
 mkdocstrings-python = "^1.9.2"
+pytest = "^8.3.3"
 
 [build-system]
 requires = ["poetry-core"]
