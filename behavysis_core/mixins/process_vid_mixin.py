@@ -4,6 +4,8 @@ Utility functions.
 
 from __future__ import annotations
 
+import os
+
 import cv2
 
 from behavysis_core.mixins.subproc_mixin import SubprocMixin
@@ -77,6 +79,8 @@ class ProcessVidMixin:
             # "quiet",
             out_fp,
         ]
+        # Making the output directory
+        os.makedirs(os.path.dirname(out_fp), exist_ok=True)
         # Running ffmpeg command
         # SubprocMixin.run_subproc_fstream(cmd)
         SubprocMixin.run_subproc_console(cmd)
