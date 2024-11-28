@@ -110,7 +110,7 @@ class ConfigsEvaluateVid(BaseModel):
 
     funcs: list[str] | str = ["keypoints", "analysis"]
     pcutoff: float | str = 0.8
-    colour_level: str = "individuals"
+    colour_level: str = KeypointsDf.CN.INDIVIDUALS.value
     radius: int | str = 3
     cmap: str = "rainbow"
     padding: int = 30
