@@ -8,8 +8,8 @@ import os
 
 import cv2
 
-from behavysis_core.mixins.subproc_mixin import SubprocMixin
-from behavysis_core.pydantic_models.vid_metadata import VidMetadata
+from behavysis_pipeline.mixins.subproc_mixin import SubprocMixin
+from behavysis_pipeline.pydantic_models.vid_metadata import VidMetadata
 
 
 class ProcessVidMixin:

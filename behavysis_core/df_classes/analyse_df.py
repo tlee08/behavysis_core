@@ -23,10 +23,9 @@ from enum import Enum
 
 import pandas as pd
 import seaborn as sns
-
-from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
-from behavysis_core.df_classes.keypoints_df import Coords
-from behavysis_core.pydantic_models.experiment_configs import ExperimentConfigs
+from behavysis_pipeline.df_classes.df_mixin import DFMixin, FramesIN
+from behavysis_pipeline.df_classes.keypoints_df import Coords
+from behavysis_pipeline.pydantic_models.experiment_configs import ExperimentConfigs
 
 ####################################################################################################
 # DF CONSTANTS

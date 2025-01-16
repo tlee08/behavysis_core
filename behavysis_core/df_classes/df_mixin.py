@@ -8,8 +8,7 @@ import os
 from enum import Enum, EnumType
 
 import pandas as pd
-
-from behavysis_core.mixins.misc_mixin import MiscMixin
+from behavysis_pipeline.mixins.misc_mixin import MiscMixin
 
 ####################################################################################################
 # DF CONSTANTS

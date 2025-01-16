@@ -1,6 +1,6 @@
-# behavysis_core
+# behavysis_pipeline
 
-[Documentation](https://tlee08.github.io/behavysis_core/)
+[Documentation](https://tlee08.github.io/behavysis_pipeline/)
 
 Core functionalities shared across the Behavysis suite.
 

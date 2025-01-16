@@ -26,10 +26,10 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-from behavysis_core.df_classes.analyse_df import AnalyseDf
-from behavysis_core.df_classes.bouts_df import BoutsDf
-from behavysis_core.df_classes.df_mixin import DFMixin
-from behavysis_core.mixins.misc_mixin import MiscMixin
+from behavysis_pipeline.df_classes.analyse_df import AnalyseDf
+from behavysis_pipeline.df_classes.bouts_df import BoutsDf
+from behavysis_pipeline.df_classes.df_mixin import DFMixin
+from behavysis_pipeline.mixins.misc_mixin import MiscMixin
 
 FBF = "fbf"
 SUMMARY = "summary"

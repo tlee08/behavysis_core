@@ -4,7 +4,7 @@ _summary_
 
 from pydantic import ConfigDict
 
-from behavysis_core.pydantic_models.pydantic_base_model import PydanticBaseModel
+from behavysis_pipeline.pydantic_models.pydantic_base_model import PydanticBaseModel
 
 
 class VidMetadata(PydanticBaseModel):

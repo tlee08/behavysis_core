@@ -12,7 +12,7 @@ from typing import Any
 
 from jinja2 import Environment, PackageLoader
 
-from behavysis_core.mixins.diagnostics_mixin import DiagnosticsMixin
+from behavysis_pipeline.mixins.diagnostics_mixin import DiagnosticsMixin
 
 
 class IOMixin:

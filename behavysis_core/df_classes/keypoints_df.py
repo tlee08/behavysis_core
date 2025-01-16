@@ -8,8 +8,7 @@ from enum import Enum
 
 import numpy as np
 import pandas as pd
-
-from behavysis_core.df_classes.df_mixin import DFMixin, FramesIN
+from behavysis_pipeline.df_classes.df_mixin import DFMixin, FramesIN
 
 ####################################################################################################
 # DF CONSTANTS

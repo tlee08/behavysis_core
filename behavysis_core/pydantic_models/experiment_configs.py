@@ -8,10 +8,10 @@ from typing import Any
 import matplotlib.pyplot as plt
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from behavysis_core.df_classes.keypoints_df import KeypointsDf
-from behavysis_core.mixins.misc_mixin import MiscMixin
-from behavysis_core.pydantic_models.pydantic_base_model import PydanticBaseModel
-from behavysis_core.pydantic_models.vid_metadata import VidMetadata
+from behavysis_pipeline.df_classes.keypoints_df import KeypointsDf
+from behavysis_pipeline.mixins.misc_mixin import MiscMixin
+from behavysis_pipeline.pydantic_models.pydantic_base_model import PydanticBaseModel
+from behavysis_pipeline.pydantic_models.vid_metadata import VidMetadata
 
 # TODO: have a function for selecting auto/user configs. May need to rejig ExperimentConfigs
 

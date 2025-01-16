@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "behavysis_core"
+name = "behavysis_pipeline"
 version = "0.1.24"
 description = "Core functionality supporting the behavysis suite"
 authors = ["BowenLab"]
 license = "LGPL-3.0-or-later"
 readme = "README.md"
-homepage = "https://tlee08.github.io/behavysis_core/"
-repository = "https://github.com/tlee08/behavysis_core"
-packages = [{ include = "behavysis_core" }]
+homepage = "https://tlee08.github.io/behavysis_pipeline/"
+repository = "https://github.com/tlee08/behavysis_pipeline"
+packages = [{ include = "behavysis_pipeline" }]
 
 [tool.poetry.dependencies]
 python = "~3.12"

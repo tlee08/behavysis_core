@@ -1,7 +1,7 @@
 # install: conda env create -f conda_env.yaml
 # update: conda env update -f conda_env.yaml --prune
 
-name: behavysis_core
+name: behavysis_pipeline
 channels:
   - conda-forge
   - defaults
@@ -12,4 +12,4 @@ dependencies:
   - ffmpeg
   - hdf5
   - pip:
-      - behavysis_core
+      - behavysis_pipeline
