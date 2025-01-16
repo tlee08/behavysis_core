@@ -4,15 +4,12 @@ Utility functions.
 
 from __future__ import annotations
 
-import functools
 import os
 import re
 import shutil
 from typing import Any
 
 from jinja2 import Environment, PackageLoader
-
-from behavysis_pipeline.mixins.diagnostics_mixin import DiagnosticsMixin
 
 
 class IOMixin:
@@ -55,35 +52,6 @@ class IOMixin:
         ```
         """
         return os.path.splitext(os.path.basename(fp))[0]
-
-    @staticmethod
-    def overwrite_check(out_fp_var: str = "out_fp", overwrite_var: str = "overwrite"):
-        """
-        Decorator to check if we should skip processing (i.e. not overwrite the file).
-        Returns the function early if we should skip.
-        """
-
-        def decorator(func):
-            """__summary__"""
-
-            @functools.wraps(func)
-            def wrapper(*args, **kwargs):
-                """__summary__"""
-                # Asserting that the variables are in the kwargs
-                assert out_fp_var in kwargs, f"Missing {out_fp_var} in kwargs"
-                assert overwrite_var in kwargs, f"Missing {overwrite_var} in kwargs"
-                # Getting the out_fp and overwrite variables
-                out_fp = kwargs[out_fp_var]
-                overwrite = kwargs[overwrite_var]
-                # If overwrite is False, checking if we should skip processing
-                if not overwrite and os.path.exists(out_fp):
-                    return DiagnosticsMixin.warning_msg(func)
-                # Running the function and returning
-                return func(*args, **kwargs)
-
-            return wrapper
-
-        return decorator
 
     @staticmethod
     def render_template(
